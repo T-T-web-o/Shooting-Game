@@ -4,6 +4,8 @@ class Player
 public:
 	int x, y;
 	
+	Player();
+
 	void Update();
 	void Draw();
 };

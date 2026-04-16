@@ -5,7 +5,7 @@ public:
 	int x, y;
 	bool Dead;
 
-	Bullet(int x, int y);
+	Bullet(int startX, int startY);
 
 	void Update();
 	void Draw();
