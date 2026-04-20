@@ -14,7 +14,11 @@ private:
 	std::vector<std::unique_ptr<Bullet>>bullets;
 	std::vector<std::unique_ptr<Enemy>>enemies;
 
+	int bgY;
+	int bgImage;
 public:
+	~GameScene();
+	GameScene();
 	void Update() override;
 	void Draw() override;
 };

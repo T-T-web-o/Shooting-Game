@@ -1,9 +1,33 @@
 #include "GameScene.h"
+#include "GameOverScene.h"
+#include "GameManager.h"
 #include "DxLib.h"
+
+
+GameScene::GameScene()
+{
+	bgY = 0;
+	bgImage = LoadGraph(TEXT("Resource/background.png"));
+}
+
+
+GameScene::~GameScene()
+{
+	DeleteGraph(bgImage);
+}
+
 
 void GameScene::Update()
 {
 	static int prevSpace = 0;
+
+	// スクロール速度
+	bgY += 2; 
+
+	if (bgY >= 600)
+	{
+		bgY = 0;
+	}
 
 	// プレイヤーの更新
 	player.Update();
@@ -35,7 +59,7 @@ void GameScene::Update()
 		enemies.push_back(std::make_unique<Enemy>());
 	}
 
-	// 当たり判定
+	// 敵と弾の当たり判定
 	for (auto& b : bullets)
 	{
 		for (auto& e : enemies)
@@ -45,6 +69,16 @@ void GameScene::Update()
 				b->Dead = true;
 				e->Dead = true;
 			}
+		}
+	}
+
+	// 敵とプレイヤーの当たり判定
+	for (auto& e : enemies)
+	{
+		if (abs(player.x - e->x) < 20 &&abs(player.y - e->y) < 20)
+		{
+			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+			return;
 		}
 	}
 
@@ -67,6 +101,9 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+	DrawGraph(0, bgY, bgImage, TRUE);
+	DrawGraph(0, bgY - 600, bgImage, TRUE);
+
 	player.Draw();
 
 	// 弾描画

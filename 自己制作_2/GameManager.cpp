@@ -1,10 +1,11 @@
 #include "GameManager.h"
 #include "GameScene.h"
+#include "TitleScene.h"
 
 // コンストラクタ
 GameManager::GameManager()
 {
-    currentScene = std::make_unique<GameScene>();
+    currentScene = std::make_unique<TitleScene>();
 }
 
 // GameManagerのインスタンス取得（シングルトン）
