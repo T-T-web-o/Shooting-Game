@@ -1,18 +1,14 @@
 #pragma once
 #include "Scene.h"
 
-class GameOverScene : public Scene
+class ClearScene : public Scene
 {
-private:
+public:
 	// “ü—ÍŠÇ—
 	bool prevEnter;
 	bool nowEnter;
 
-	int bgImage;
-
 public:
-	GameOverScene();
-	~GameOverScene();
 	void Update()override;
 	void Draw()override;
 };

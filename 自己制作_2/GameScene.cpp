@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
 #include "GameManager.h"
+#include "ClearScene.h"
 #include "DxLib.h"
 
 
@@ -12,6 +13,8 @@ GameScene::GameScene()
 	bulletImage = LoadGraph(TEXT("Resource/bullet.png"));
 	enemyImage = LoadGraph(TEXT("Resource/enemy.png"));
 	
+	clearTimer = 0;
+	isClear = false;
 }
 
 
@@ -27,6 +30,7 @@ GameScene::~GameScene()
 void GameScene::Update()
 {
 	static int prevSpace = 0;
+	static int spawnTimer = 0;
 
 	// ƒXƒNƒ[ƒ‹‘¬“x
 	bgY += 2; 
@@ -61,9 +65,11 @@ void GameScene::Update()
 	}
 
 	// “G‚ð¶¬
-	if (rand() % 60 == 0)
+	spawnTimer++;
+	if (spawnTimer > 120) 
 	{
 		enemies.push_back(std::make_unique<Enemy>());
+		spawnTimer = 0;
 	}
 
 	// “G‚Æ’e‚Ì“–‚½‚è”»’è
@@ -71,7 +77,7 @@ void GameScene::Update()
 	{
 		for (auto& e : enemies)
 		{
-			if (abs(b->x - e->x) < 20 && abs(b->y - e->y) < 20)
+			if (abs(b->x - e->x) < 30 && abs(b->y - e->y) < 20)
 			{
 				b->Dead = true;
 				e->Dead = true;
@@ -104,6 +110,20 @@ void GameScene::Update()
 			return e->Dead;
 		}),
 		enemies.end());
+
+	// ƒQ[ƒ€ƒNƒŠƒA
+	clearTimer++;
+
+	if (clearTimer > 1800) 
+	{
+		isClear = true;
+	}
+
+	if (isClear)
+	{
+		GameManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());
+		return;
+	}
 }
 
 void GameScene::Draw()

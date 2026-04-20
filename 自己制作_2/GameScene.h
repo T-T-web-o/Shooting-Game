@@ -14,12 +14,15 @@ private:
 	std::vector<std::unique_ptr<Bullet>>bullets;
 	std::vector<std::unique_ptr<Enemy>>enemies;
 
+	// ‰æ‘œ
 	int bgY;
 	int bgImage;
-
 	int bulletImage;
 	int playerImage;
 	int enemyImage;
+
+	int clearTimer;
+	bool isClear;
 
 public:
 	~GameScene();

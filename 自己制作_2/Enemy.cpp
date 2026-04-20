@@ -4,7 +4,7 @@
 
 Enemy::Enemy()
 {
-	x = rand() % 500;
+	x = rand() % 450;
 	y = 0;
 	Dead = false;
 }

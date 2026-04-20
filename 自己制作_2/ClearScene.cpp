@@ -1,19 +1,9 @@
-#include "GameOverScene.h"
-#include "GameManager.h"
-#include "TitleScene.h"
+#include "ClearScene.h"
 #include "DxLib.h"
+#include "TitleScene.h"
+#include "GameManager.h"
 
-GameOverScene::GameOverScene()
-{
-    bgImage = LoadGraph(TEXT("Resource/GameOver.png"));
-}
-
-GameOverScene::~GameOverScene()
-{
-    DeleteGraph(bgImage);
-}
-
-void GameOverScene::Update()
+void ClearScene::Update()
 {
     // EnterÉLÅ[ì¸óÕéÊìæ
     nowEnter = (CheckHitKey(KEY_INPUT_RETURN));
@@ -27,10 +17,8 @@ void GameOverScene::Update()
     prevEnter = nowEnter;
 }
 
-void GameOverScene::Draw()
+void ClearScene::Draw()
 {
-    DrawGraph(0, 0, bgImage, TRUE);
-
-    DrawString(150, 200, TEXT("GAME OVER"), GetColor(255, 0, 0));
+    DrawString(150, 200, TEXT("GAME CLEAR"), GetColor(255, 255, 0));
     DrawString(150, 300, TEXT("Press Enter to Title"), GetColor(255, 255, 255));
 }
