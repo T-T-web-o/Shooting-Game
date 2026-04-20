@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include "GameScene.h"
 #include "DxLib.h"
 
 Bullet::Bullet(int startX, int startY)
@@ -6,6 +7,10 @@ Bullet::Bullet(int startX, int startY)
 	x = startX;
 	y = startY;
 	Dead = false;
+}
+
+Bullet::~Bullet()
+{
 }
 
 void Bullet::Update()
@@ -18,7 +23,7 @@ void Bullet::Update()
 	}
 }
 
-void Bullet::Draw()
+void Bullet::Draw(int Image)
 {
-	DrawCircle(x, y, 5, GetColor(255, 0, 0), TRUE);
+	DrawRotaGraph(x, y,0.15,0.0, Image, TRUE);
 }

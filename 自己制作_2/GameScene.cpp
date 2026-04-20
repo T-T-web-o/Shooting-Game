@@ -8,12 +8,19 @@ GameScene::GameScene()
 {
 	bgY = 0;
 	bgImage = LoadGraph(TEXT("Resource/background.png"));
+	playerImage = LoadGraph(TEXT("Resource/player.png"));
+	bulletImage = LoadGraph(TEXT("Resource/bullet.png"));
+	enemyImage = LoadGraph(TEXT("Resource/enemy.png"));
+	
 }
 
 
 GameScene::~GameScene()
 {
 	DeleteGraph(bgImage);
+	DeleteGraph(playerImage);
+	DeleteGraph(bulletImage);
+	DeleteGraph(enemyImage);
 }
 
 
@@ -75,7 +82,7 @@ void GameScene::Update()
 	// “G‚ÆƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è
 	for (auto& e : enemies)
 	{
-		if (abs(player.x - e->x) < 20 &&abs(player.y - e->y) < 20)
+		if (abs(player.x - e->x) < 30 &&abs(player.y - e->y) < 25)
 		{
 			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
 			return;
@@ -104,17 +111,17 @@ void GameScene::Draw()
 	DrawGraph(0, bgY, bgImage, TRUE);
 	DrawGraph(0, bgY - 600, bgImage, TRUE);
 
-	player.Draw();
+	player.Draw(playerImage);
 
 	// ’e•`‰æ
 	for (auto& b : bullets)
 	{
-		b->Draw();
+		b->Draw(bulletImage);
 	}
 
 	// “G•`‰æ
 	for (auto& e : enemies)
 	{
-		e->Draw();
+		e->Draw(enemyImage);
 	}
 }

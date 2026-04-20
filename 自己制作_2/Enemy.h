@@ -8,6 +8,6 @@ public:
 	Enemy();
 
 	void Update();
-	void Draw();
+	void Draw(int Image);
 };
 

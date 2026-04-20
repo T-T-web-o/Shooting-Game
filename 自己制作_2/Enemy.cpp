@@ -18,7 +18,7 @@ void Enemy::Update()
 	}
 }
 
-void Enemy::Draw()
+void Enemy::Draw(int Image)
 {
-	DrawBox(x - 10, y - 10, x + 10, y + 10, GetColor(255, 0, 0), TRUE);
+	DrawRotaGraph(x, y, 0.07, 0.0, Image, TRUE);
 }

@@ -23,8 +23,7 @@ void Player::Update()
 	if (y > 470)y = 470;
 }
 
-void Player::Draw()
+void Player::Draw(int Image)
 {
-	// ÉvÉåÉCÉÑÅ[ï`âÊ
-	DrawBox(x - 10, y - 10, x + 10, y + 10, GetColor(0, 0, 0), TRUE);
+	DrawRotaGraph(x, y, 0.1, 0.0, Image, TRUE);
 }

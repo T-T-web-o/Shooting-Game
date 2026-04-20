@@ -16,6 +16,11 @@ private:
 
 	int bgY;
 	int bgImage;
+
+	int bulletImage;
+	int playerImage;
+	int enemyImage;
+
 public:
 	~GameScene();
 	GameScene();

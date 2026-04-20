@@ -7,6 +7,6 @@ public:
 	Player();
 
 	void Update();
-	void Draw();
+	void Draw(int Image);
 };
 
