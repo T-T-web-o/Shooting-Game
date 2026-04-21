@@ -25,5 +25,5 @@ void Bullet::Update()
 
 void Bullet::Draw(int Image)
 {
-	DrawRotaGraph(x, y,0.15,0.0, Image, TRUE);
+	DrawGraph(x, y, Image, TRUE);
 }

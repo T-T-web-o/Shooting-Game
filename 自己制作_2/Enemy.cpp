@@ -20,5 +20,5 @@ void Enemy::Update()
 
 void Enemy::Draw(int Image)
 {
-	DrawRotaGraph(x, y, 0.07, 0.0, Image, TRUE);
+	DrawGraph(x, y, Image, TRUE);
 }

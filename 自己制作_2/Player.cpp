@@ -11,10 +11,10 @@ Player::Player()
 void Player::Update()
 {
 	// ˆÚ“®
-	if (CheckHitKey(KEY_INPUT_LEFT))x -= 5;
-	if (CheckHitKey(KEY_INPUT_RIGHT))x += 5;
-	if (CheckHitKey(KEY_INPUT_UP))y -= 5;
-	if (CheckHitKey(KEY_INPUT_DOWN))y += 5;
+	if (CheckHitKey(KEY_INPUT_A))x -= 5;
+	if (CheckHitKey(KEY_INPUT_D))x += 5;
+	if (CheckHitKey(KEY_INPUT_W))y -= 5;
+	if (CheckHitKey(KEY_INPUT_S))y += 5;
 
 	// ‰æ–ÊŠO–hŽ~
 	if (x < 0)x = 0;
@@ -25,5 +25,5 @@ void Player::Update()
 
 void Player::Draw(int Image)
 {
-	DrawRotaGraph(x, y, 0.1, 0.0, Image, TRUE);
+	DrawGraph(x, y, Image, TRUE);
 }

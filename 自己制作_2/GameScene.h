@@ -21,9 +21,15 @@ private:
 	int playerImage;
 	int enemyImage;
 
+	// ‰æ‘œƒTƒCƒY
+	int playerW, playerH;
+	int enemyW, enemyH;
+	int bulletW, bulletH;
+
 	int clearTimer;
 	bool isClear;
 
+	
 public:
 	~GameScene();
 	GameScene();

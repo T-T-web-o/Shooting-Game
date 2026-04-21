@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
 #include "GameManager.h"
-#include "ClearScene.h"
+#include "ClearScene.h" 
 #include "DxLib.h"
 
 
@@ -15,6 +15,10 @@ GameScene::GameScene()
 	
 	clearTimer = 0;
 	isClear = false;
+
+	GetGraphSize(playerImage, &playerW, &playerH);
+	GetGraphSize(enemyImage, &enemyW, &enemyH);
+	GetGraphSize(bulletImage, &bulletW, &bulletH);
 }
 
 
@@ -72,12 +76,14 @@ void GameScene::Update()
 		spawnTimer = 0;
 	}
 
+	
+
 	// “G‚Æ’e‚Ì“–‚½‚è”»’è
 	for (auto& b : bullets)
 	{
 		for (auto& e : enemies)
 		{
-			if (abs(b->x - e->x) < 30 && abs(b->y - e->y) < 20)
+			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && abs(b->y - e->y) < (bulletH + enemyH) / 2)
 			{
 				b->Dead = true;
 				e->Dead = true;
@@ -88,7 +94,7 @@ void GameScene::Update()
 	// “G‚ÆƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è
 	for (auto& e : enemies)
 	{
-		if (abs(player.x - e->x) < 30 &&abs(player.y - e->y) < 25)
+		if (abs(player.x - e->x) < (playerW + enemyW) / 2-5 &&abs(player.y - e->y) < (playerH + enemyH) / 2-5)
 		{
 			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
 			return;
