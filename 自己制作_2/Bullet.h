@@ -5,7 +5,7 @@ private:
 
 public:
 	int x, y;
-	bool Dead;
+	bool isDead;
 
 	Bullet(int startX, int startY);
 

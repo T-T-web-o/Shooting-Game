@@ -11,14 +11,19 @@ GameScene::GameScene()
 	bgImage = LoadGraph(TEXT("Resource/background.png"));
 	playerImage = LoadGraph(TEXT("Resource/player.png"));
 	bulletImage = LoadGraph(TEXT("Resource/bullet.png"));
-	enemyImage = LoadGraph(TEXT("Resource/enemy.png"));
+	enemyImage1 = LoadGraph(TEXT("Resource/enemy1.png"));
+	enemyImage2 = LoadGraph(TEXT("Resource/enemy2.png"));
+	enemyImage3 = LoadGraph(TEXT("Resource/enemy3.png"));
 	
+	GetGraphSize(playerImage, &playerW, &playerH);
+	GetGraphSize(enemyImage1, &enemyW, &enemyH);
+	GetGraphSize(bulletImage, &bulletW, &bulletH);
+
 	clearTimer = 0;
 	isClear = false;
 
-	GetGraphSize(playerImage, &playerW, &playerH);
-	GetGraphSize(enemyImage, &enemyW, &enemyH);
-	GetGraphSize(bulletImage, &bulletW, &bulletH);
+	prevSpace = 0;
+	spawnTimer = 0;
 }
 
 
@@ -27,14 +32,14 @@ GameScene::~GameScene()
 	DeleteGraph(bgImage);
 	DeleteGraph(playerImage);
 	DeleteGraph(bulletImage);
-	DeleteGraph(enemyImage);
+	DeleteGraph(enemyImage1);
+	DeleteGraph(enemyImage3);
+	DeleteGraph(enemyImage2);
 }
 
 
 void GameScene::Update()
 {
-	static int prevSpace = 0;
-	static int spawnTimer = 0;
 
 	// ƒXƒNƒ[ƒ‹‘¬“x
 	bgY += 2; 
@@ -85,8 +90,14 @@ void GameScene::Update()
 		{
 			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && abs(b->y - e->y) < (bulletH + enemyH) / 2)
 			{
-				b->Dead = true;
-				e->Dead = true;
+				b->isDead = true;
+				e->hp--;
+
+				if (e->hp <= 0)
+				{
+					e->isDead = true;
+				}
+				break;
 			}
 		}
 	}
@@ -105,7 +116,7 @@ void GameScene::Update()
 	bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
 		[](const std::unique_ptr<Bullet>& b)
 		{
-			return b->Dead;
+			return b->isDead;
 		}),
 		bullets.end());
 
@@ -113,7 +124,8 @@ void GameScene::Update()
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
 		[](const std::unique_ptr<Enemy>& e)
 		{
-			return e->Dead;
+			return e->isDead;
+
 		}),
 		enemies.end());
 
@@ -148,6 +160,20 @@ void GameScene::Draw()
 	// “G•`‰æ
 	for (auto& e : enemies)
 	{
-		e->Draw(enemyImage);
+		int img = enemyImage1;
+
+		switch (e->type)
+		{
+		case NORMAL:
+			img = enemyImage1;
+			break;
+		case FAST:
+			img = enemyImage2;
+			break;
+		case ZIGZAG:
+			img = enemyImage3;
+			break;
+		}
+		e->Draw(img);
 	}
 }

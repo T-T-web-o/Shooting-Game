@@ -19,7 +19,9 @@ private:
 	int bgImage;
 	int bulletImage;
 	int playerImage;
-	int enemyImage;
+	int enemyImage1;
+	int enemyImage2;
+	int enemyImage3;
 
 	// ‰æ‘œƒTƒCƒY
 	int playerW, playerH;
@@ -29,6 +31,8 @@ private:
 	int clearTimer;
 	bool isClear;
 
+	int prevSpace;
+	int spawnTimer;
 	
 public:
 	~GameScene();

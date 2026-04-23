@@ -6,7 +6,7 @@ Bullet::Bullet(int startX, int startY)
 {
 	x = startX;
 	y = startY;
-	Dead = false;
+	isDead = false;
 }
 
 Bullet::~Bullet()
@@ -19,7 +19,7 @@ void Bullet::Update()
 
 	if (y < 0)
 	{
-		Dead = true;
+		isDead = true;
 	}
 }
 
