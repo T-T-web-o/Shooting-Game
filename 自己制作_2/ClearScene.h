@@ -9,7 +9,11 @@ public:
 	bool nowEnter;
 
 public:
+
+	// XVˆ—
 	void Update()override;
+
+   // •`‰æˆ—
 	void Draw()override;
 };
 

@@ -3,6 +3,7 @@
 class Scene
 {
 public:
+	// デストラクタ
 	virtual ~Scene() {}
 
 	// 更新処理

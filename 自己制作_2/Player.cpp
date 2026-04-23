@@ -3,7 +3,7 @@
 
 Player::Player()
 {
-	// プレイヤーの初期化
+	// 位置初期化
 	x = 300;
 	y = 300;
 }
@@ -25,5 +25,6 @@ void Player::Update()
 
 void Player::Draw(int Image)
 {
+	// 指定された画像を描画
 	DrawGraph(x, y, Image, TRUE);
 }

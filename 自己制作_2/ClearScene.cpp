@@ -11,6 +11,7 @@ void ClearScene::Update()
     // Enterキーが押されたか判定
     if (nowEnter && !prevEnter)
     {
+        // タイトルシーンに移行
         GameManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
     }
     // 前フレームの入力を保存
@@ -19,6 +20,9 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
+    // GAME CLEARを描画
     DrawString(150, 200, TEXT("GAME CLEAR"), GetColor(255, 255, 0));
+    
+    // 操作案内
     DrawString(150, 300, TEXT("Press Enter to Title"), GetColor(255, 255, 255));
 }

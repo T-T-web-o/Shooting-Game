@@ -7,21 +7,33 @@
 
 GameScene::GameScene()
 {
+	// ”wŒi‰æ‘œ‚ÌYÀ•W
 	bgY = 0;
+
+	// ”wŒi‰æ‘œ
 	bgImage = LoadGraph(TEXT("Resource/background.png"));
+
+	// ƒvƒŒƒCƒ„[‰æ‘œ
 	playerImage = LoadGraph(TEXT("Resource/player.png"));
+
+	// ’e‰æ‘œ
 	bulletImage = LoadGraph(TEXT("Resource/bullet.png"));
+
+	// “G‰æ‘œ
 	enemyImage1 = LoadGraph(TEXT("Resource/enemy1.png"));
 	enemyImage2 = LoadGraph(TEXT("Resource/enemy2.png"));
 	enemyImage3 = LoadGraph(TEXT("Resource/enemy3.png"));
 	
+	// ‰æ‘œƒTƒCƒYŽæ“¾
 	GetGraphSize(playerImage, &playerW, &playerH);
 	GetGraphSize(enemyImage1, &enemyW, &enemyH);
 	GetGraphSize(bulletImage, &bulletW, &bulletH);
 
+	// ƒQ[ƒ€ó‘Ô
 	clearTimer = 0;
 	isClear = false;
 
+	// “ü—ÍE¶¬ŠÇ—
 	prevSpace = 0;
 	spawnTimer = 0;
 }
@@ -29,6 +41,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	// ‰æ‘œ‚Ì‰ð•ú
 	DeleteGraph(bgImage);
 	DeleteGraph(playerImage);
 	DeleteGraph(bulletImage);
@@ -37,11 +50,10 @@ GameScene::~GameScene()
 	DeleteGraph(enemyImage2);
 }
 
-
 void GameScene::Update()
 {
 
-	// ƒXƒNƒ[ƒ‹‘¬“x
+	// ”wŒiƒXƒNƒ[ƒ‹‘¬“x
 	bgY += 2; 
 
 	if (bgY >= 600)
@@ -88,11 +100,13 @@ void GameScene::Update()
 	{
 		for (auto& e : enemies)
 		{
+			// “–‚½‚è”»’è
 			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && abs(b->y - e->y) < (bulletH + enemyH) / 2)
 			{
-				b->isDead = true;
-				e->hp--;
+				b->isDead = true; // ’eíœ
+				e->hp--;          // ƒ_ƒ[ƒW
 
+				// hp‚ª0‚É‚È‚Á‚½‚çíœ
 				if (e->hp <= 0)
 				{
 					e->isDead = true;
@@ -146,9 +160,11 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+	// ”wŒi‰æ‘œ•`‰æ(ƒ‹[ƒv)
 	DrawGraph(0, bgY, bgImage, TRUE);
 	DrawGraph(0, bgY - 600, bgImage, TRUE);
 
+	// ƒvƒŒƒCƒ„[‰æ‘œ
 	player.Draw(playerImage);
 
 	// ’e•`‰æ
@@ -162,6 +178,7 @@ void GameScene::Draw()
 	{
 		int img = enemyImage1;
 
+		// Ží—Þ‚²‚Æ‚É‰æ‘œ‚ð•ÏX
 		switch (e->type)
 		{
 		case NORMAL:

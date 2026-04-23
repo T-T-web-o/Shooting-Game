@@ -8,12 +8,20 @@ private:
 	bool prevEnter;
 	bool nowEnter;
 
+	// 背景画像
 	int bgImage;
 
 public:
+	// コンストラクタ
 	GameOverScene();
+
+	// デストラクタ
 	~GameOverScene();
+
+	// 更新処理
 	void Update()override;
+
+	// 描画処理
 	void Draw()override;
 };
 
