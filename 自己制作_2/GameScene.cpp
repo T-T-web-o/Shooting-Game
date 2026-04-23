@@ -24,18 +24,23 @@ GameScene::GameScene()
 	enemyImage2 = LoadGraph(TEXT("Resource/enemy2.png"));
 	enemyImage3 = LoadGraph(TEXT("Resource/enemy3.png"));
 	
+	// ボス画像
+	bossImage = LoadGraph(TEXT("Resource/boss.png"));
+
 	// 画像サイズ取得
 	GetGraphSize(playerImage, &playerW, &playerH);
 	GetGraphSize(enemyImage1, &enemyW, &enemyH);
 	GetGraphSize(bulletImage, &bulletW, &bulletH);
-
+	GetGraphSize(bossImage, &bossW, &bossH);
+	
 	// ゲーム状態
-	clearTimer = 0;
-	isClear = false;
+	bossTimer = 0;
 
 	// 入力・生成管理
 	prevSpace = 0;
 	spawnTimer = 0;
+
+	isBoss = false;
 }
 
 
@@ -48,6 +53,7 @@ GameScene::~GameScene()
 	DeleteGraph(enemyImage1);
 	DeleteGraph(enemyImage3);
 	DeleteGraph(enemyImage2);
+	DeleteGraph(bossImage);
 }
 
 void GameScene::Update()
@@ -85,6 +91,13 @@ void GameScene::Update()
 		e->Update();
 	}
 
+	// ボス更新
+	if (boss)
+	{
+		boss->Update();
+	}
+
+
 	// 敵を生成
 	spawnTimer++;
 	if (spawnTimer > 120) 
@@ -92,8 +105,6 @@ void GameScene::Update()
 		enemies.push_back(std::make_unique<Enemy>());
 		spawnTimer = 0;
 	}
-
-	
 
 	// 敵と弾の当たり判定
 	for (auto& b : bullets)
@@ -126,6 +137,37 @@ void GameScene::Update()
 		}
 	}
 
+	// Boss出現
+	bossTimer++;
+
+	if (!isBoss && bossTimer > 1800)
+	{
+		isBoss = true;
+		boss = std::make_unique<Boss>();
+	}
+
+	// ボスと弾の当たり判定
+	if (boss)
+	{
+		for (auto& b : bullets)
+		{
+			if (abs(b->x - boss->x) < (bulletW + bossW) / 2 - 5 && abs(b->y - boss->y) < (bulletH + bossH) / 2 - 5)
+			{
+				b->isDead = true; // 弾削除
+				boss->hp--;       // ダメージ
+
+				// hpが0になったらクリア
+				if (boss->hp <= 0)
+				{
+					// クリアシーンへ移行
+					GameManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());
+					return;
+				}
+			}
+		}
+	}
+
+
 	// ===== 弾を削除 =====
 	bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
 		[](const std::unique_ptr<Bullet>& b)
@@ -143,19 +185,6 @@ void GameScene::Update()
 		}),
 		enemies.end());
 
-	// ゲームクリア
-	clearTimer++;
-
-	if (clearTimer > 1800) 
-	{
-		isClear = true;
-	}
-
-	if (isClear)
-	{
-		GameManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());
-		return;
-	}
 }
 
 void GameScene::Draw()
@@ -192,5 +221,11 @@ void GameScene::Draw()
 			break;
 		}
 		e->Draw(img);
+	}
+
+	// ボス描画
+	if (boss)
+	{
+		boss->Draw(bossImage);
 	}
 }

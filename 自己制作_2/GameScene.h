@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Enemy.h"
+#include "Boss.h"
 #include <vector>
 #include <memory>
 
@@ -12,10 +13,12 @@ private:
 	// プレイヤー
 	Player player;
 
-	// 弾・敵の管理
+	// 弾・敵・ボスの管理
 	std::vector<std::unique_ptr<Bullet>>bullets;
 	std::vector<std::unique_ptr<Enemy>>enemies;
+	std::unique_ptr<Boss>boss;
 
+	bool isBoss;
 	// 画像
 	int bgY; // 背景のスクロール位置
 	int bgImage;
@@ -24,15 +27,16 @@ private:
 	int enemyImage1;
 	int enemyImage2;
 	int enemyImage3;
+	int bossImage;
 
 	// 画像サイズ
 	int playerW, playerH;
 	int enemyW, enemyH;
 	int bulletW, bulletH;
+	int bossW, bossH;
 
 	// ゲーム状態
-	int clearTimer;
-	bool isClear;
+	int bossTimer;
 
 	// 入力・生成の管理
 	int prevSpace;
