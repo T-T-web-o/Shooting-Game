@@ -8,7 +8,7 @@ Player::Player()
 	y = 300;
 	
 	// Œ»İ‚Ì‘Ì—Í
-	hp = 3;
+	hp = 10;
 
 	// –³“GŠÔ
 	InvincibilityTimer = 0;

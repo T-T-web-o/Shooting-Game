@@ -1,9 +1,8 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
 #include "GameManager.h"
-#include "ClearScene.h" 
+#include "GameClearScene.h" 
 #include "DxLib.h"
-
 
 GameScene::GameScene()
 {
@@ -43,8 +42,10 @@ GameScene::GameScene()
 	// ボス出現フラグ
 	isBoss = false;
 
-	// スコア
+	// UI
 	score = 0;
+	maxHP = 10;
+	
 }
 
 GameScene::~GameScene()
@@ -185,7 +186,7 @@ void GameScene::Update()
 				if (boss->hp <= 0)
 				{
 					// クリアシーンへ移行
-					GameManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());
+					GameManager::GetInstance().ChangeScene(std::make_unique<GameClearScene>());
 					return;
 				}
 				break;
@@ -267,11 +268,20 @@ void GameScene::Draw()
 	// ボス出現までの時間を表示
 	int remain = 1800 - bossTimer;
 	if (remain < 0)remain = 0;
-	DrawFormatString(0, 0, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain /60);
-
+	DrawFormatString(400, 0, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain /60);
+	
 	// 現在スコアを表示
-	DrawFormatString(460, 0, GetColor(0, 0, 0), TEXT("スコア: %d"), score);
+	DrawFormatString(0, 0, GetColor(0, 255, 0), TEXT("SCORE % d"), score);
 
 	// プレイヤー体力表示
-	DrawFormatString(500, 30, GetColor(0, 255, 0), TEXT("HP: %d"), player.hp);
+	int x = 10; int y = 450; // 表示位置
+
+	DrawBox(x, y, x + maxHP * 30, y + 20, GetColor(0,0,0), TRUE);
+	for (int i = 0; i < player.hp; i++)
+	{
+		int r = 255 * (maxHP - i) / maxHP; // RGB値を計算
+		int g = 255 * i / maxHP;
+		int b = 0;
+		DrawBox(x + 2 + i * 30, y + 2, x + 28 + i * 30, y+18, GetColor(r, g, b), TRUE);
+	}
 }

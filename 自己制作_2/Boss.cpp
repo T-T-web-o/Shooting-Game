@@ -6,7 +6,7 @@ Boss::Boss()
 {
 	x = 200;
 	y = 50;
-	hp = 30;
+	hp = 20;
 	isDead = false;
 	t = 0;
 }

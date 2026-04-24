@@ -42,7 +42,11 @@ private:
 	int prevSpace;
 	int spawnTimer;
 	
+	// UI
 	int score;
+	int maxHP;
+	int hpWidth;
+
 public:
 
 	~GameScene();
