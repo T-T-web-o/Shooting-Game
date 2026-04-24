@@ -7,7 +7,7 @@ Enemy::Enemy()
 {
 	// 初期位置設定
 	x = rand() % 450;
-	y = 0;
+	y = -30;
 
 	// 生存状態
 	isDead = false;
@@ -15,8 +15,22 @@ Enemy::Enemy()
 	// ZIGZAG用基準位置
 	baseX = x;
 
-	// 敵の種類をランダムに設定
-	type = static_cast<EnemyType>(rand() % COUNT);
+	// 敵の出現率を設定
+	int r = rand() % 100;
+	
+	if (r < 60)
+	{
+		type = NORMAL;
+	}
+	else if (r < 90)
+	{
+		type = FAST;
+	}
+	else
+	{
+		type = ZIGZAG;
+	}
+
 
 	// 体力の初期化
 	switch (type)

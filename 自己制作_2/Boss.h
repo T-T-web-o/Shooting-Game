@@ -1,6 +1,8 @@
 #pragma once
 class Boss
 {
+private:
+	int t;
 public:
 	int x, y;
 	int hp;

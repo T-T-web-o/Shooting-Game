@@ -8,6 +8,9 @@ Bullet::Bullet(int startX, int startY)
 	x = startX;
 	y = startY;
 
+	// ƒ_ƒ\ƒW‚ğİ’è
+	damage = 1;
+
 	// ¶‘¶ó‘Ô
 	isDead = false;
 }

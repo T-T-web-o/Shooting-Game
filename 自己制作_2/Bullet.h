@@ -8,6 +8,9 @@ public:
 	// 現在位置
 	int x, y;
 
+	// 弾のダメージ
+	int damage;
+
 	// 削除フラグ
 	bool isDead;
 

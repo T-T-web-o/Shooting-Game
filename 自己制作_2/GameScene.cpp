@@ -98,9 +98,9 @@ void GameScene::Update()
 	}
 
 
-	// 敵を生成
+	// 敵を生成(ボス出現で削除)
 	spawnTimer++;
-	if (spawnTimer > 120) 
+	if (!isBoss && spawnTimer > 60)
 	{
 		enemies.push_back(std::make_unique<Enemy>());
 		spawnTimer = 0;
@@ -112,10 +112,11 @@ void GameScene::Update()
 		for (auto& e : enemies)
 		{
 			// 当たり判定
-			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && abs(b->y - e->y) < (bulletH + enemyH) / 2)
+			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && 
+				abs(b->y - e->y) < (bulletH + enemyH) / 2)
 			{
 				b->isDead = true; // 弾削除
-				e->hp--;          // ダメージ
+				e->hp -= b->damage;          // ダメージ
 
 				// hpが0になったら削除
 				if (e->hp <= 0)
@@ -130,7 +131,8 @@ void GameScene::Update()
 	// 敵とプレイヤーの当たり判定
 	for (auto& e : enemies)
 	{
-		if (abs(player.x - e->x) < (playerW + enemyW) / 2-5 &&abs(player.y - e->y) < (playerH + enemyH) / 2-5)
+		if (abs(player.x - e->x) < (playerW + enemyW) / 3 &&
+			abs(player.y - e->y) < (playerH + enemyH) / 3)
 		{
 			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
 			return;
@@ -151,11 +153,11 @@ void GameScene::Update()
 	{
 		for (auto& b : bullets)
 		{
-			if (abs(b->x - boss->x) < (bulletW + bossW) / 2 - 5 && abs(b->y - boss->y) < (bulletH + bossH) / 2 - 5)
+			if (abs(b->x - boss->x) < (bulletW + bossW) / 3 &&
+				abs(b->y - boss->y) < (bulletH + bossH) / 3)
 			{
 				b->isDead = true; // 弾削除
-				boss->hp--;       // ダメージ
-
+				boss->hp -= b->damage;       // ダメージ
 				// hpが0になったらクリア
 				if (boss->hp <= 0)
 				{
@@ -163,7 +165,19 @@ void GameScene::Update()
 					GameManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());
 					return;
 				}
+				break;
 			}
+		}
+	}
+
+	// ボスとプレイヤーの当たり判定
+	if (boss)
+	{
+		if (abs(player.x - boss->x) < (playerW + bossW) / 2 - 5 && 
+			abs(player.y - boss->y) < (playerH + bossH) / 2 - 5)
+		{
+			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+			return;
 		}
 	}
 
@@ -228,4 +242,10 @@ void GameScene::Draw()
 	{
 		boss->Draw(bossImage);
 	}
+
+	// ボス出現までの時間を表示
+	int remain = 1800 - bossTimer;
+	if (remain < 0)remain = 0;
+	DrawFormatString(0, 0, GetColor(255, 0, 0), TEXT("ボス出現まで:%d"), remain /60);
+
 }

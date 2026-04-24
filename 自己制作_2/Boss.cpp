@@ -8,12 +8,14 @@ Boss::Boss()
 	y = 50;
 	hp = 30;
 	isDead = false;
+	t = 0;
 }
 
 void Boss::Update()
 {
-	x = 200 + static_cast<int>(sin(y * 0.05) * 100);
-	y += 1;
+	t++;
+	x = 200 + static_cast<int>(sin(t * 0.05) * 100);
+	
 }
 
 void Boss::Draw(int Image)
