@@ -36,7 +36,7 @@ void GameOverScene::Draw()
     DrawGraph(0, 0, bgImage, TRUE);
 
     // GAME OVER Çï`âÊ
-    DrawString(150, 200, TEXT("GAME OVER"), GetColor(255, 0, 0));
+    DrawString(250, 200, TEXT("GAME OVER"), GetColor(255, 0, 0));
 
     // ëÄçÏàƒì‡
     DrawString(150, 300, TEXT("Press Enter to Title"), GetColor(255, 255, 255));

@@ -42,6 +42,7 @@ private:
 	int prevSpace;
 	int spawnTimer;
 	
+	int score;
 public:
 
 	~GameScene();

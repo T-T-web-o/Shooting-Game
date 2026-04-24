@@ -6,6 +6,12 @@ Player::Player()
 	// ˆÊ’u‰Šú‰»
 	x = 300;
 	y = 300;
+	
+	// Œ»Ý‚Ì‘Ì—Í
+	hp = 3;
+
+	// –³“GŽžŠÔ
+	InvincibilityTimer = 0;
 }
 
 void Player::Update()
@@ -21,6 +27,12 @@ void Player::Update()
 	if (x > 630)x = 630;
 	if (y < 0)y = 0;
 	if (y > 470)y = 470;
+
+	// –³“GŽžŠÔ‚ðŒ¸‚ç‚·
+	if (InvincibilityTimer > 0)
+	{
+		InvincibilityTimer--;
+	}
 }
 
 void Player::Draw(int Image)

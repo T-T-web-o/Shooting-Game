@@ -6,6 +6,15 @@
 TitleScene::TitleScene()
 {
    isReady = false;
+
+   // ”wŒi‰æ‘œ“Ç‚İ‚İ
+   titleImage = LoadGraph(TEXT("Resource/title.png"));
+}
+
+// g—p‚µ‚½‰æ‘œ‚Ì‰ğ•ú
+TitleScene::~TitleScene()
+{
+    DeleteGraph(titleImage);
 }
 
 void TitleScene::Update()
@@ -32,11 +41,9 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-    int color = GetColor(255, 255, 255);
-
-    SetFontSize(50);
-    DrawString(150, 130, TEXT("SHOOTING GAME"), color);
+    // ”wŒi‰æ‘œ‚Ì•`‰æ
+    DrawGraph(0, 0, titleImage, TRUE);
 
     SetFontSize(30);
-    DrawString(150, 300, TEXT("Press Enter"), color);
+    DrawString(450, 450, TEXT("Press Enter"), GetColor(0, 0, 0));
 }

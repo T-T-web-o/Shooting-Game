@@ -9,7 +9,6 @@ enum EnemyType
 	COUNT
 };
 
-
 class Enemy
 {
 private:

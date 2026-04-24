@@ -5,6 +5,12 @@ public:
 	// 現在位置
 	int x, y;
 
+	// 現在の体力
+	int hp;
+
+	// 無敵時間
+	int InvincibilityTimer;
+
 	// コンストラクタ
 	Player();
 

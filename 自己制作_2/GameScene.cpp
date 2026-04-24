@@ -40,9 +40,12 @@ GameScene::GameScene()
 	prevSpace = 0;
 	spawnTimer = 0;
 
+	// ボス出現フラグ
 	isBoss = false;
-}
 
+	// スコア
+	score = 0;
+}
 
 GameScene::~GameScene()
 {
@@ -97,7 +100,6 @@ void GameScene::Update()
 		boss->Update();
 	}
 
-
 	// 敵を生成(ボス出現で削除)
 	spawnTimer++;
 	if (!isBoss && spawnTimer > 60)
@@ -121,6 +123,18 @@ void GameScene::Update()
 				// hpが0になったら削除
 				if (e->hp <= 0)
 				{
+					switch (e->type)
+					{
+					case NORMAL:
+						score += 100;
+						break;
+					case FAST:
+						score += 200;
+						break;
+					case ZIGZAG:
+						score += 300;
+						break;
+					}
 					e->isDead = true;
 				}
 				break;
@@ -134,8 +148,17 @@ void GameScene::Update()
 		if (abs(player.x - e->x) < (playerW + enemyW) / 3 &&
 			abs(player.y - e->y) < (playerH + enemyH) / 3)
 		{
-			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
-			return;
+			if (player.InvincibilityTimer == 0)
+			{
+				e->isDead = true;
+				player.hp--;
+				player.InvincibilityTimer = 60;
+				if (player.hp <= 0)
+				{
+					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					return;
+				}
+			}
 		}
 	}
 
@@ -181,7 +204,6 @@ void GameScene::Update()
 		}
 	}
 
-
 	// ===== 弾を削除 =====
 	bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
 		[](const std::unique_ptr<Bullet>& b)
@@ -198,7 +220,6 @@ void GameScene::Update()
 
 		}),
 		enemies.end());
-
 }
 
 void GameScene::Draw()
@@ -246,6 +267,11 @@ void GameScene::Draw()
 	// ボス出現までの時間を表示
 	int remain = 1800 - bossTimer;
 	if (remain < 0)remain = 0;
-	DrawFormatString(0, 0, GetColor(255, 0, 0), TEXT("ボス出現まで:%d"), remain /60);
+	DrawFormatString(0, 0, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain /60);
 
+	// 現在スコアを表示
+	DrawFormatString(460, 0, GetColor(0, 0, 0), TEXT("スコア: %d"), score);
+
+	// プレイヤー体力表示
+	DrawFormatString(500, 30, GetColor(0, 255, 0), TEXT("HP: %d"), player.hp);
 }
