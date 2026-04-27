@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "TitleScene.h"
 #include "GameManager.h"
+#include "ResultScene.h"
 
 GameClearScene::GameClearScene()
 {
@@ -27,7 +28,7 @@ void GameClearScene::Update()
     if (nowEnter && !prevEnter)
     {
         // タイトルシーンに移行
-        GameManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
+        GameManager::GetInstance().ChangeScene(std::make_unique<ResultScene>());
     }
     // 前フレームの入力を保存
     prevEnter = nowEnter;

@@ -10,6 +10,9 @@ ResultScene::ResultScene()
 
     // 背景画像読み込み
     bgImage = LoadGraph(TEXT("Resource/.png"));
+
+    // ゲームシーンのスコアを取得
+    score = GameManager::GetInstance().GetScore();
 }
 
 ResultScene::~ResultScene()
@@ -37,4 +40,7 @@ void ResultScene::Draw()
 {
     // 背景画像の描画
     DrawExtendGraph(0, 0, screenW, screenH, bgImage, TRUE);
+    
+    // スコア表示
+    DrawFormatString(200, 150, GetColor(255, 255, 255), TEXT("score: %d"), score);
 }

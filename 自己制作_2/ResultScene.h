@@ -15,6 +15,7 @@ private:
 	int screenW;
 	int screenH;
 
+	int score;
 public:
 	ResultScene();
 	~ResultScene();

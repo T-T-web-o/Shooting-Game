@@ -203,6 +203,7 @@ void GameScene::Update()
 				if (boss->hp <= 0)
 				{
 					// クリアシーンへ移行
+					GameManager::GetInstance().SetScore(score);
 					GameManager::GetInstance().ChangeScene(std::make_unique<GameClearScene>());
 					return;
 				}

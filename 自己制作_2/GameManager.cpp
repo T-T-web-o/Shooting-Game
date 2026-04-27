@@ -32,3 +32,13 @@ void GameManager::ChangeScene(std::unique_ptr<Scene> next)
 {
     currentScene = std::move(next);
 }
+
+void GameManager::SetScore(int s)
+{
+    score = s;
+}
+
+int GameManager::GetScore() const
+{
+    return score;
+}
