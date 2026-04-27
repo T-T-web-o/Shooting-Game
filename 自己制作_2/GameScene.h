@@ -29,6 +29,10 @@ private:
 	int enemyImage3;
 	int bossImage;
 
+	// Œø‰Ê‰¹
+	int shotSE;
+	int hitSE;
+
 	// ‰æ‘œƒTƒCƒY
 	int playerW, playerH;
 	int enemyW, enemyH;

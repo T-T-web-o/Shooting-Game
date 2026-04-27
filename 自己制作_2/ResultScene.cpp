@@ -1,24 +1,24 @@
-#include "GameClearScene.h"
+#include "ResultScene.h"
 #include "DxLib.h"
 #include "TitleScene.h"
 #include "GameManager.h"
 
-GameClearScene::GameClearScene()
+ResultScene::ResultScene()
 {
     // 画面サイズ取得
     GetDrawScreenSize(&screenW, &screenH);
 
     // 背景画像読み込み
-    bgImage = LoadGraph(TEXT("Resource/GameClear.png"));
+    bgImage = LoadGraph(TEXT("Resource/.png"));
 }
 
-GameClearScene::~GameClearScene()
+ResultScene::~ResultScene()
 {
-    // 使用した画像の解放
+    // 使用した画像の開放
     DeleteGraph(bgImage);
 }
 
-void GameClearScene::Update()
+void ResultScene::Update()
 {
     // Enterキー入力取得
     nowEnter = (CheckHitKey(KEY_INPUT_RETURN));
@@ -26,23 +26,15 @@ void GameClearScene::Update()
     // Enterキーが押されたか判定
     if (nowEnter && !prevEnter)
     {
-        // タイトルシーンに移行
+        // タイトルシーンへ移行
         GameManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
     }
     // 前フレームの入力を保存
     prevEnter = nowEnter;
 }
 
-void GameClearScene::Draw()
+void ResultScene::Draw()
 {
     // 背景画像の描画
     DrawExtendGraph(0, 0, screenW, screenH, bgImage, TRUE);
-
-    // GAME CLEARを描画
-    SetFontSize(40);
-    DrawString(230, 200, TEXT("GAME CLEAR"), GetColor(255, 255, 0));
-    
-    // 操作案内
-    SetFontSize(15);
-    DrawString(450, 450, TEXT("Press Enter to Title"), GetColor(255, 255, 255));
 }

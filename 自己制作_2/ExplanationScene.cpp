@@ -7,8 +7,26 @@
 const int GUIDE_TITLE_X = 220;             // 「ゲーム説明」タイトルのX座標
 const int GUIDE_TITLE_Y = 10;              // 「ゲーム説明」タイトルのY座標
 
-const int GUIDE_TEXT_X = 100;              // 説明文のX座標
-const int GUIDE_TEXT_Y = 40;               // 説明文のY座標
+const int GUIDE_TEXT_X = 100;              // 説明のX座標
+const int GUIDE_TEXT_Y_START = 90;       // 操作説明のY座標
+const int GUIDE_TEXT_SPACE = 35;         // 操作説明同士の間隔
+
+// ゲーム説明テキスト一覧
+const TCHAR* guideText[] =
+{
+    TEXT("[操作方法]"),
+    TEXT("WASD : 移動"),
+    TEXT("SPACE : 攻撃"),
+    TEXT("[ルール]"),
+    TEXT("敵を倒してスコアを稼ごう"),
+    TEXT("ボスを倒すとクリア"),
+    TEXT("[ヒント]"),
+    TEXT("敵を避けながら戦おう"),
+    TEXT("HPが0になるとゲームオーバー"),
+};
+
+// 配列の要素数を自動で取得
+const int GUIDE_COUNT = sizeof(guideText) / sizeof(guideText[0]);
 
 ExplanationScene::ExplanationScene()
 {
@@ -20,12 +38,12 @@ ExplanationScene::ExplanationScene()
     playerImage = LoadGraph(TEXT("Resource/player.png"));
     enemyImage1 = LoadGraph(TEXT("Resource/enemy1.png"));
     enemyImage2 = LoadGraph(TEXT("Resource/enemy2.png"));
-
-    page = 0;
 }
+
 
 ExplanationScene::~ExplanationScene()
 {
+    // 使用した画像の解放
     DeleteGraph(bgImage);
     DeleteGraph(playerImage);
     DeleteGraph(enemyImage1);
@@ -58,21 +76,12 @@ void ExplanationScene::Draw()
 
     SetFontSize(20); 
    
-    DrawString(100, 90, TEXT("操作方法"), GetColor(0, 0, 0));
-
-    DrawString(100, 130, TEXT("WASD : 移動"), GetColor(0, 0, 0));
-    DrawString(100, 160, TEXT("SPACE : 攻撃"), GetColor(0, 0, 0));
-
-    DrawString(100, 200, TEXT("ルール"), GetColor(0, 0, 0));
-
-    DrawString(100, 240, TEXT("敵を倒してスコアを稼ごう"), GetColor(0, 0, 0));
-    DrawString(100, 270, TEXT("ボスを倒すとクリア"), GetColor(0, 0, 0));
-
-    DrawString(100, 310, TEXT("ヒント"), GetColor(0, 0, 0));
-
-    DrawString(100, 350, TEXT("敵を避けながら戦おう"), GetColor(0, 0, 0));
-    DrawString(100, 380, TEXT("HPが0になるとゲームオーバー"), GetColor(0, 0, 0));
-
+    // ゲーム説明テキストの表示
+    for (int i = 0; i < GUIDE_COUNT; i++)
+    {
+        DrawString(GUIDE_TEXT_X, GUIDE_TEXT_Y_START + GUIDE_TEXT_SPACE * i, guideText[i], GetColor(0, 0, 0));
+    }
+  
     DrawString(250, 450, TEXT("EnterでGameへ"), GetColor(255, 255, 255));
 
     // 操作機体表示
@@ -81,10 +90,10 @@ void ExplanationScene::Draw()
     DrawRotaGraph(470, 165, 1.6, 0.0, playerImage, TRUE);
 
     // 敵表示
-    DrawString(430, 230, TEXT("敵"), GetColor(0, 0, 0));
+    DrawString(430, 240, TEXT("敵"), GetColor(0, 0, 0));
 
-    DrawRotaGraph(470, 280, 1.0, 0.0, enemyImage1, TRUE);
-    DrawRotaGraph(540, 280, 1.0, 0.0, enemyImage2, TRUE);
+    DrawRotaGraph(470, 290, 1.0, 0.0, enemyImage1, TRUE);
+    DrawRotaGraph(540, 290, 1.0, 0.0, enemyImage2, TRUE);
 
     // 体力バー
     DrawString(430, 400, TEXT("HPバー(初期HP : 10)"), GetColor(0, 0, 0));

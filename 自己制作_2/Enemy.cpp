@@ -36,13 +36,13 @@ Enemy::Enemy()
 	switch (type)
 	{
 	case NORMAL:
-		hp = 1;
+		hp = 100;
 		break;
 	case FAST:
-		hp = 2;
+		hp = 200;
 		break;
 	case ZIGZAG:
-		hp = 2;
+		hp = 200;
 		break;
 	}
 }

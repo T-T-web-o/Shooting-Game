@@ -9,7 +9,7 @@ Bullet::Bullet(int startX, int startY)
 	y = startY;
 
 	// ƒ_ƒ\ƒW‚ğİ’è
-	damage = 1;
+	damage = 100;
 
 	// ¶‘¶ó‘Ô
 	isDead = false;

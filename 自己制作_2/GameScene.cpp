@@ -32,6 +32,10 @@ GameScene::GameScene()
 	GetGraphSize(bulletImage, &bulletW, &bulletH);
 	GetGraphSize(bossImage, &bossW, &bossH);
 	
+	// 効果音
+	shotSE = LoadSoundMem(TEXT("Resource/shot.wav"));
+	hitSE = LoadSoundMem(TEXT("Resource/hit.wav"));
+
 	// 画面サイズ取得
 	GetDrawScreenSize(&screenW, &screenH);
 
@@ -53,7 +57,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	// 画像の解放
+	// 使用した画像効果音の解放
 	DeleteGraph(bgImage);
 	DeleteGraph(playerImage);
 	DeleteGraph(bulletImage);
@@ -61,6 +65,8 @@ GameScene::~GameScene()
 	DeleteGraph(enemyImage3);
 	DeleteGraph(enemyImage2);
 	DeleteGraph(bossImage);
+	DeleteSoundMem(shotSE);
+	DeleteSoundMem(hitSE);
 }
 
 void GameScene::Update()
@@ -81,7 +87,9 @@ void GameScene::Update()
 	int nowSpace = CheckHitKey(KEY_INPUT_SPACE);
 
 	if (nowSpace && !prevSpace)
-	{
+	{ 
+		// 弾発生時に効果音再生
+		PlaySoundMem(shotSE, DX_PLAYTYPE_BACK);
 		bullets.push_back(std::make_unique<Bullet>(player.x, player.y));
 	}
 	prevSpace = nowSpace;
@@ -121,6 +129,9 @@ void GameScene::Update()
 			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && 
 				abs(b->y - e->y) < (bulletH + enemyH) / 2)
 			{
+				// 弾ヒット時に効果音再生
+				PlaySoundMem(hitSE, DX_PLAYTYPE_BACK);
+
 				b->isDead = true; // 弾削除
 				e->hp -= b->damage;          // ダメージ
 
@@ -183,6 +194,9 @@ void GameScene::Update()
 			if (abs(b->x - boss->x) < (bulletW + bossW) / 3 &&
 				abs(b->y - boss->y) < (bulletH + bossH) / 3)
 			{
+				// 弾ヒット時に効果音再生
+				PlaySoundMem(hitSE, DX_PLAYTYPE_BACK);
+
 				b->isDead = true; // 弾削除
 				boss->hp -= b->damage;       // ダメージ
 				// hpが0になったらクリア
