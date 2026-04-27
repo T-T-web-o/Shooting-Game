@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 
-class GameOverScene : public Scene
+class ExplanationScene : public Scene
 {
 private:
 	// 入力管理
@@ -10,21 +10,20 @@ private:
 
 	// 背景画像
 	int bgImage;
+	int playerImage;
+	int enemyImage1;
+	int enemyImage2;
 
 	// 画面サイズ取得
 	int screenW;
 	int screenH;
+
+	int page;
 public:
-	// コンストラクタ
-	GameOverScene();
+	ExplanationScene();
+	~ExplanationScene();
 
-	// デストラクタ
-	~GameOverScene();
-
-	// 更新処理
 	void Update()override;
-
-	// 描画処理
 	void Draw()override;
 };
 

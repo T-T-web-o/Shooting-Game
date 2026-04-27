@@ -5,6 +5,9 @@
 
 GameClearScene::GameClearScene()
 {
+    // ‰æ–ÊƒTƒCƒYæ“¾
+    GetDrawScreenSize(&screenW, &screenH);
+
     // ”wŒi‰æ‘œ“Ç‚İ‚İ
     bgImage = LoadGraph(TEXT("Resource/GameClear.png"));
 }
@@ -32,7 +35,7 @@ void GameClearScene::Update()
 void GameClearScene::Draw()
 {
     // ”wŒi‰æ‘œ‚Ì•`‰æ
-    DrawGraph(0, 0, bgImage, TRUE);
+    DrawExtendGraph(0, 0, screenW, screenH, bgImage, TRUE);
 
     // GAME CLEAR‚ğ•`‰æ
     SetFontSize(40);

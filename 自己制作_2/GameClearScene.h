@@ -3,13 +3,17 @@
 
 class GameClearScene : public Scene
 {
-public:
+private:
 	// 入力管理
 	bool prevEnter;
 	bool nowEnter;
 
 	// 背景画像
 	int bgImage;
+
+	// 画面サイズ取得
+	int screenW;
+	int screenH;
 
 public:
 	// コンストラクタ

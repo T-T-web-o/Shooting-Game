@@ -32,6 +32,9 @@ GameScene::GameScene()
 	GetGraphSize(bulletImage, &bulletW, &bulletH);
 	GetGraphSize(bossImage, &bossW, &bossH);
 	
+	// 画面サイズ取得
+	GetDrawScreenSize(&screenW, &screenH);
+
 	// ゲーム状態
 	bossTimer = 0;
 
@@ -200,8 +203,16 @@ void GameScene::Update()
 		if (abs(player.x - boss->x) < (playerW + bossW) / 2 - 5 && 
 			abs(player.y - boss->y) < (playerH + bossH) / 2 - 5)
 		{
-			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
-			return;
+			if (player.InvincibilityTimer == 0)
+			{
+				player.hp--;
+				player.InvincibilityTimer = 60;
+				if (player.hp <= 0)
+				{
+					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					return;
+				}
+			}
 		}
 	}
 
@@ -267,9 +278,16 @@ void GameScene::Draw()
 
 	// ボス出現までの時間を表示
 	int remain = 1800 - bossTimer;
-	if (remain < 0)remain = 0;
-	DrawFormatString(400, 0, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain /60);
+	if (remain > 0)
+	{
+		DrawFormatString(360, 0, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain / 60);
+	}
+	else
+	{
+		DrawString(400, 0, TEXT("ボス出現中！"), GetColor(255, 0, 0));
+	}
 	
+
 	// 現在スコアを表示
 	DrawFormatString(0, 0, GetColor(0, 255, 0), TEXT("SCORE % d"), score);
 

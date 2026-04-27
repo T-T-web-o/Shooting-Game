@@ -1,11 +1,15 @@
 #include "TitleScene.h"
 #include "GameManager.h"
 #include "GameScene.h"
+#include "ExplanationScene.h"
 #include "DxLib.h"
 
 TitleScene::TitleScene()
 {
    isReady = false;
+
+   // 画面サイズ取得
+   GetDrawScreenSize(&screenW, &screenH);
 
    // 背景画像読み込み
    titleImage = LoadGraph(TEXT("Resource/title.png"));
@@ -33,7 +37,7 @@ void TitleScene::Update()
     // Enterキーが押されたか判定
     if (nowEnter && !prevEnter)
     {
-        GameManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
+        GameManager::GetInstance().ChangeScene(std::make_unique<ExplanationScene>());
     }
     // 前フレームの入力を保存
     prevEnter = nowEnter;
@@ -42,7 +46,7 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
     // 背景画像の描画
-    DrawGraph(0, 0, titleImage, TRUE);
+    DrawExtendGraph(0, 0, screenW, screenH, titleImage, TRUE);
 
     SetFontSize(30);
     DrawString(450, 450, TEXT("Press Enter"), GetColor(0, 0, 0));

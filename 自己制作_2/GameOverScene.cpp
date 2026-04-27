@@ -5,6 +5,9 @@
 
 GameOverScene::GameOverScene()
 {
+    // ‰æ–ÊƒTƒCƒYæ“¾
+    GetDrawScreenSize(&screenW, &screenH);
+
     // ”wŒi‰æ‘œ“Ç‚İ‚İ
     bgImage = LoadGraph(TEXT("Resource/GameOver.png"));
 }
@@ -33,7 +36,7 @@ void GameOverScene::Update()
 void GameOverScene::Draw()
 {
     // ”wŒi‰æ‘œ‚Ì•`‰æ
-    DrawGraph(0, 0, bgImage, TRUE);
+    DrawExtendGraph(0, 0, screenW, screenH, bgImage, TRUE);
 
     // GAME OVER ‚ğ•`‰æ
     SetFontSize(40);

@@ -35,6 +35,10 @@ private:
 	int bulletW, bulletH;
 	int bossW, bossH;
 
+	// 画面サイズ取得
+	int screenW;
+	int screenH;
+
 	// ゲーム状態
 	int bossTimer;
 
