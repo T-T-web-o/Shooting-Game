@@ -3,6 +3,12 @@
 #include "TitleScene.h"
 #include "DxLib.h"
 
+const int TITLE_TEXT_X = 230;
+const int TITLE_TEXT_Y = 200;
+
+const int GUIDE_X = 450;
+const int GUIDE_Y = 460;
+
 GameOverScene::GameOverScene()
 {
     // âÊñ ÉTÉCÉYéÊìæ
@@ -40,9 +46,9 @@ void GameOverScene::Draw()
 
     // GAME OVER Çï`âÊ
     SetFontSize(40);
-    DrawString(230, 200, TEXT("GAME OVER"), GetColor(255, 0, 0));
+    DrawString(TITLE_TEXT_X, TITLE_TEXT_Y, TEXT("GAME OVER"), GetColor(255, 0, 0));
 
     // ëÄçÏàƒì‡
     SetFontSize(15);
-    DrawString(450, 460, TEXT("Press Enter to Title"), GetColor(255, 255, 255));
+    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter to Title"), GetColor(255, 255, 255));
 }

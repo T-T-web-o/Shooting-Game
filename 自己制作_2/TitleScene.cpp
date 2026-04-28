@@ -4,6 +4,9 @@
 #include "ExplanationScene.h"
 #include "DxLib.h"
 
+const int GUIDE_X = 450;
+const int GUIDE_Y = 450;
+
 TitleScene::TitleScene()
 {
    isReady = false;
@@ -49,5 +52,5 @@ void TitleScene::Draw()
     DrawExtendGraph(0, 0, screenW, screenH, titleImage, TRUE);
 
     SetFontSize(30);
-    DrawString(450, 450, TEXT("Press Enter"), GetColor(0, 0, 0));
+    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter"), GetColor(0, 0, 0));
 }

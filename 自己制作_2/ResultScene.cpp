@@ -9,7 +9,7 @@ ResultScene::ResultScene()
     GetDrawScreenSize(&screenW, &screenH);
 
     // 背景画像読み込み
-    bgImage = LoadGraph(TEXT("Resource/.png"));
+    bgImage = LoadGraph(TEXT("Resource/background.png"));
 
     // ゲームシーンのスコアを取得
     score = GameManager::GetInstance().GetScore();
@@ -41,6 +41,18 @@ void ResultScene::Draw()
     // 背景画像の描画
     DrawExtendGraph(0, 0, screenW, screenH, bgImage, TRUE);
     
+    // リザルト表示
+    SetFontSize(70);
+    DrawString(200, 10, TEXT("RESULT"), GetColor(0, 0, 0));
+
     // スコア表示
-    DrawFormatString(200, 150, GetColor(255, 255, 255), TEXT("score: %d"), score);
+    SetFontSize(60);
+    DrawString(230, 130, TEXT("SCORE"), GetColor(0, 0, 0));
+
+    SetFontSize(180);
+    DrawFormatString(150, 210, GetColor(0, 255, 0), TEXT("%d"), score);
+
+    // 操作案内
+    SetFontSize(30);
+    DrawString(450, 450, TEXT("Press Enter"), GetColor(100, 100, 0));
 }

@@ -4,12 +4,38 @@
 #include "Player.h"
 #include "DxLib.h"
 
-const int GUIDE_TITLE_X = 220;             // 「ゲーム説明」タイトルのX座標
-const int GUIDE_TITLE_Y = 10;              // 「ゲーム説明」タイトルのY座標
+const int GUIDE_TITLE_X = 220;       // 「ゲーム説明」タイトルのX座標
+const int GUIDE_TITLE_Y = 10;        // 「ゲーム説明」タイトルのY座標
 
-const int GUIDE_TEXT_X = 100;              // 説明のX座標
-const int GUIDE_TEXT_Y_START = 90;       // 操作説明のY座標
-const int GUIDE_TEXT_SPACE = 35;         // 操作説明同士の間隔
+const int GUIDE_TEXT_X = 100;        // 説明のX座標
+const int GUIDE_TEXT_Y_START = 90;   // 操作説明のY座標
+const int GUIDE_TEXT_SPACE = 35;     // 操作説明同士の間隔
+
+const int START_TEXT_X = 250;        // 「Enterでゲームスタート」のX座標
+const int START_TEXT_Y = 450;        // 「Enterでゲームスタート」のY座標
+
+// 操作機体
+const int PLAYER_TEXT_X = 430;       // 「操作機体」のX座標
+const int PLAYER_TEXT_Y = 90;        // 「操作機体」のY座標
+const int PLAYER_IMG_X = 470;        // 機体画像のX座標
+const int PLAYER_IMG_Y = 165;        // 機体画像のY座標
+const double PLAYER_SCALE = 1.6;     // 画像の大きさ
+
+// 敵
+const int ENEMY_TEXT_X = 430;        // 「敵」のX座標
+const int ENEMY_TEXT_Y = 240;        // 「敵」のY座標
+const int ENEMY1_X = 470;            // 敵１画像のX座標 
+const int ENEMY2_X = 540;            // 敵２画像のY座標
+const int ENEMY_Y = 290;             // 敵画像のY座標
+
+// HPバー
+const int HP_TEXT_X = 430;           // 「HPバー」のX座標
+const int HP_TEXT_Y = 400;           // 「HPバー」のY座標
+const int HP_BLOCK_WIDTH = 30;       // 黒いHPバーの幅
+const int HP_BLOCK_HEIGHT = 20;      // 黒いHPバーの高さ
+const int HP_MAX = 10;               // 最大体力
+
+const int COLOR_TEXT = GetColor(0, 0, 0);  // 黒
 
 // ゲーム説明テキスト一覧
 const TCHAR* guideText[] =
@@ -72,38 +98,41 @@ void ExplanationScene::Draw()
 
     SetFontSize(40); 
     // ゲーム説明
-    DrawString(GUIDE_TITLE_X, GUIDE_TITLE_Y, TEXT("ゲーム説明"), GetColor(0, 0, 0));
+    DrawString(GUIDE_TITLE_X, GUIDE_TITLE_Y, TEXT("ゲーム説明"), COLOR_TEXT);
 
     SetFontSize(20); 
    
     // ゲーム説明テキストの表示
     for (int i = 0; i < GUIDE_COUNT; i++)
     {
-        DrawString(GUIDE_TEXT_X, GUIDE_TEXT_Y_START + GUIDE_TEXT_SPACE * i, guideText[i], GetColor(0, 0, 0));
+        DrawString(GUIDE_TEXT_X, GUIDE_TEXT_Y_START + GUIDE_TEXT_SPACE * i, guideText[i], COLOR_TEXT);
     }
   
-    DrawString(250, 450, TEXT("EnterでGameへ"), GetColor(255, 255, 255));
+    // スタート案内
+    DrawString(START_TEXT_X, START_TEXT_Y, TEXT("EnterでGameスタート"), COLOR_TEXT);
 
     // 操作機体表示
-    DrawString(430, 90, TEXT("操作機体"), GetColor(0, 0, 0));
+    DrawString(PLAYER_TEXT_X, PLAYER_TEXT_Y, TEXT("操作機体"), COLOR_TEXT);
 
-    DrawRotaGraph(470, 165, 1.6, 0.0, playerImage, TRUE);
+    DrawRotaGraph(PLAYER_IMG_X, PLAYER_IMG_Y, PLAYER_SCALE, 0.0, playerImage, TRUE);
 
     // 敵表示
-    DrawString(430, 240, TEXT("敵"), GetColor(0, 0, 0));
+    DrawString(ENEMY_TEXT_X, ENEMY_TEXT_Y, TEXT("敵"), COLOR_TEXT);
 
-    DrawRotaGraph(470, 290, 1.0, 0.0, enemyImage1, TRUE);
-    DrawRotaGraph(540, 290, 1.0, 0.0, enemyImage2, TRUE);
+    DrawRotaGraph(ENEMY1_X, ENEMY_Y, 1.0, 0.0, enemyImage1, TRUE);
+    DrawRotaGraph(ENEMY2_X, ENEMY_Y, 1.0, 0.0, enemyImage2, TRUE);
 
     // 体力バー
-    DrawString(430, 400, TEXT("HPバー(初期HP : 10)"), GetColor(0, 0, 0));
+    DrawString(HP_TEXT_X, HP_TEXT_Y, TEXT("HPバー(初期HP : 10)"), COLOR_TEXT);
 
     int x = 330; int y = 420; // 表示位置
-    DrawBox(x, y, x + 10 * 30, y + 20, GetColor(0, 0, 0), TRUE);
-    for (int i = 0; i < 10; i++)
+
+    DrawBox(x, y, x + 10 * HP_BLOCK_WIDTH, y + HP_BLOCK_HEIGHT, COLOR_TEXT, TRUE);
+
+    for (int i = 0; i < HP_MAX; i++)
     {
-        int r = 255 * (10 - i) / 10; // RGB値を計算
-        int g = 255 * i / 10;
+        int r = 255 * (HP_MAX - i) / HP_MAX; // RGB値を計算
+        int g = 255 * i / HP_MAX;
         int b = 0;
         DrawBox(x + 2 + i * 30, y + 2, x + 28 + i * 30, y + 18, GetColor(r, g, b), TRUE);
     }

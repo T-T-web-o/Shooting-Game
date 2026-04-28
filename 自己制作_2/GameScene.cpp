@@ -4,6 +4,19 @@
 #include "GameClearScene.h" 
 #include "DxLib.h"
 
+// ボス関連
+const int BOSS_TIME_X = 360;
+const int BOSS_TIME_Y = 0;
+const int BOSS_TEXT_X = 400;
+
+// スコア
+const int SCORE_X = 0;
+const int SCORE_Y = 0;
+
+// HPバー
+const int HP_BLOCK_WIDTH = 30;       // 黒いHPバーの幅
+const int HP_BLOCK_HEIGHT = 20;      // 黒いHPバーの高さ
+
 GameScene::GameScene()
 {
 	// 背景画像のY座標
@@ -295,21 +308,21 @@ void GameScene::Draw()
 	int remain = 1800 - bossTimer;
 	if (remain > 0)
 	{
-		DrawFormatString(360, 0, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain / 60);
+		DrawFormatString(BOSS_TIME_X, BOSS_TIME_Y, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain / 60);
 	}
 	else
 	{
-		DrawString(400, 0, TEXT("ボス出現中！"), GetColor(255, 0, 0));
+		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス出現中！"), GetColor(255, 0, 0));
 	}
 	
 
 	// 現在スコアを表示
-	DrawFormatString(0, 0, GetColor(0, 255, 0), TEXT("SCORE % d"), score);
+	DrawFormatString(SCORE_X, SCORE_Y, GetColor(0, 255, 0), TEXT("SCORE %d"), score);
 
 	// プレイヤー体力表示
 	int x = 10; int y = 450; // 表示位置
 
-	DrawBox(x, y, x + maxHP * 30, y + 20, GetColor(0,0,0), TRUE);
+	DrawBox(x, y, x + maxHP * HP_BLOCK_WIDTH, y + HP_BLOCK_HEIGHT, GetColor(0,0,0), TRUE);
 	for (int i = 0; i < player.hp; i++)
 	{
 		int r = 255 * (maxHP - i) / maxHP; // RGB値を計算
