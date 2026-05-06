@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 
-class GameOverScene : public Scene
+class ResultScene:public Scene
 {
 private:
 	// 入力管理
@@ -14,17 +14,14 @@ private:
 	// 画面サイズ取得
 	int screenW;
 	int screenH;
+
+	int score;
 public:
-	// コンストラクタ
-	GameOverScene();
+	ResultScene();
+	~ResultScene();
 
-	// デストラクタ
-	~GameOverScene();
-
-	// 更新処理
 	void Update()override;
-
-	// 描画処理
 	void Draw()override;
+
 };
 

@@ -11,6 +11,7 @@ private:
 	// コンストラクタ
 	GameManager();
 	
+	int score;
 public:
 
 	// GameManagerのインスタンス取得
@@ -23,5 +24,8 @@ public:
 
 	// シーンの切り替え
 	void ChangeScene(std::unique_ptr<Scene>next);
+
+	void SetScore(int s);
+	int GetScore() const;
 };
 

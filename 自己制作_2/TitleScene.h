@@ -14,6 +14,12 @@ private:
 
 	// シーン切り替え時のバグ防止
 	bool isReady;
+
+	// 画面サイズ取得
+	int screenW;
+	int screenH;
+
+
 public:
 
 	// コンストラクタ

@@ -4,6 +4,19 @@
 #include "GameClearScene.h" 
 #include "DxLib.h"
 
+// ボス関連
+const int BOSS_TIME_X = 360;
+const int BOSS_TIME_Y = 0;
+const int BOSS_TEXT_X = 400;
+
+// スコア
+const int SCORE_X = 0;
+const int SCORE_Y = 0;
+
+// HPバー
+const int HP_BLOCK_WIDTH = 30;       // 黒いHPバーの幅
+const int HP_BLOCK_HEIGHT = 20;      // 黒いHPバーの高さ
+
 GameScene::GameScene()
 {
 	// 背景画像のY座標
@@ -32,6 +45,13 @@ GameScene::GameScene()
 	GetGraphSize(bulletImage, &bulletW, &bulletH);
 	GetGraphSize(bossImage, &bossW, &bossH);
 	
+	// 効果音
+	shotSE = LoadSoundMem(TEXT("Resource/shot.wav"));
+	hitSE = LoadSoundMem(TEXT("Resource/hit.wav"));
+
+	// 画面サイズ取得
+	GetDrawScreenSize(&screenW, &screenH);
+
 	// ゲーム状態
 	bossTimer = 0;
 
@@ -50,7 +70,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	// 画像の解放
+	// 使用した画像効果音の解放
 	DeleteGraph(bgImage);
 	DeleteGraph(playerImage);
 	DeleteGraph(bulletImage);
@@ -58,6 +78,8 @@ GameScene::~GameScene()
 	DeleteGraph(enemyImage3);
 	DeleteGraph(enemyImage2);
 	DeleteGraph(bossImage);
+	DeleteSoundMem(shotSE);
+	DeleteSoundMem(hitSE);
 }
 
 void GameScene::Update()
@@ -78,7 +100,9 @@ void GameScene::Update()
 	int nowSpace = CheckHitKey(KEY_INPUT_SPACE);
 
 	if (nowSpace && !prevSpace)
-	{
+	{ 
+		// 弾発生時に効果音再生
+		PlaySoundMem(shotSE, DX_PLAYTYPE_BACK);
 		bullets.push_back(std::make_unique<Bullet>(player.x, player.y));
 	}
 	prevSpace = nowSpace;
@@ -118,6 +142,9 @@ void GameScene::Update()
 			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && 
 				abs(b->y - e->y) < (bulletH + enemyH) / 2)
 			{
+				// 弾ヒット時に効果音再生
+				PlaySoundMem(hitSE, DX_PLAYTYPE_BACK);
+
 				b->isDead = true; // 弾削除
 				e->hp -= b->damage;          // ダメージ
 
@@ -180,12 +207,16 @@ void GameScene::Update()
 			if (abs(b->x - boss->x) < (bulletW + bossW) / 3 &&
 				abs(b->y - boss->y) < (bulletH + bossH) / 3)
 			{
+				// 弾ヒット時に効果音再生
+				PlaySoundMem(hitSE, DX_PLAYTYPE_BACK);
+
 				b->isDead = true; // 弾削除
 				boss->hp -= b->damage;       // ダメージ
 				// hpが0になったらクリア
 				if (boss->hp <= 0)
 				{
 					// クリアシーンへ移行
+					GameManager::GetInstance().SetScore(score);
 					GameManager::GetInstance().ChangeScene(std::make_unique<GameClearScene>());
 					return;
 				}
@@ -200,8 +231,16 @@ void GameScene::Update()
 		if (abs(player.x - boss->x) < (playerW + bossW) / 2 - 5 && 
 			abs(player.y - boss->y) < (playerH + bossH) / 2 - 5)
 		{
-			GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
-			return;
+			if (player.InvincibilityTimer == 0)
+			{
+				player.hp--;
+				player.InvincibilityTimer = 60;
+				if (player.hp <= 0)
+				{
+					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					return;
+				}
+			}
 		}
 	}
 
@@ -267,16 +306,23 @@ void GameScene::Draw()
 
 	// ボス出現までの時間を表示
 	int remain = 1800 - bossTimer;
-	if (remain < 0)remain = 0;
-	DrawFormatString(400, 0, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain /60);
+	if (remain > 0)
+	{
+		DrawFormatString(BOSS_TIME_X, BOSS_TIME_Y, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain / 60);
+	}
+	else
+	{
+		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス出現中！"), GetColor(255, 0, 0));
+	}
 	
+
 	// 現在スコアを表示
-	DrawFormatString(0, 0, GetColor(0, 255, 0), TEXT("SCORE % d"), score);
+	DrawFormatString(SCORE_X, SCORE_Y, GetColor(0, 255, 0), TEXT("SCORE %d"), score);
 
 	// プレイヤー体力表示
 	int x = 10; int y = 450; // 表示位置
 
-	DrawBox(x, y, x + maxHP * 30, y + 20, GetColor(0,0,0), TRUE);
+	DrawBox(x, y, x + maxHP * HP_BLOCK_WIDTH, y + HP_BLOCK_HEIGHT, GetColor(0,0,0), TRUE);
 	for (int i = 0; i < player.hp; i++)
 	{
 		int r = 255 * (maxHP - i) / maxHP; // RGB値を計算

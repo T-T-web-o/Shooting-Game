@@ -29,11 +29,19 @@ private:
 	int enemyImage3;
 	int bossImage;
 
+	// 効果音
+	int shotSE;
+	int hitSE;
+
 	// 画像サイズ
 	int playerW, playerH;
 	int enemyW, enemyH;
 	int bulletW, bulletH;
 	int bossW, bossH;
+
+	// 画面サイズ取得
+	int screenW;
+	int screenH;
 
 	// ゲーム状態
 	int bossTimer;
