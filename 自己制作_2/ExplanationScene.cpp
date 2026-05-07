@@ -4,6 +4,10 @@
 #include "Player.h"
 #include "DxLib.h"
 
+//============================================================
+// 描画用定数
+//============================================================
+
 const int GUIDE_TITLE_X = 220;       // 「ゲーム説明」タイトルのX座標
 const int GUIDE_TITLE_Y = 10;        // 「ゲーム説明」タイトルのY座標
 
@@ -35,7 +39,8 @@ const int HP_BLOCK_WIDTH = 30;       // 黒いHPバーの幅
 const int HP_BLOCK_HEIGHT = 20;      // 黒いHPバーの高さ
 const int HP_MAX = 10;               // 最大体力
 
-const int COLOR_TEXT = GetColor(0, 0, 0);  // 黒
+// 文字の色(黒)
+const int COLOR_TEXT = GetColor(0, 0, 0); 
 
 // ゲーム説明テキスト一覧
 const TCHAR* guideText[] =
@@ -54,6 +59,9 @@ const TCHAR* guideText[] =
 // 配列の要素数を自動で取得
 const int GUIDE_COUNT = sizeof(guideText) / sizeof(guideText[0]);
 
+//============================================================
+// コンストラクタ
+//============================================================
 ExplanationScene::ExplanationScene()
 {
     // 画面サイズ取得
@@ -66,7 +74,9 @@ ExplanationScene::ExplanationScene()
     enemyImage2 = LoadGraph(TEXT("Resource/enemy2.png"));
 }
 
-
+//============================================================
+// デストラクタ(使用した画像の解放)
+//============================================================
 ExplanationScene::~ExplanationScene()
 {
     // 使用した画像の解放
@@ -76,6 +86,9 @@ ExplanationScene::~ExplanationScene()
     DeleteGraph(enemyImage2);
 }
 
+//============================================================
+// 更新処理
+//============================================================
 void ExplanationScene::Update()
 {
     // Enterキー入力取得
@@ -91,6 +104,9 @@ void ExplanationScene::Update()
     prevEnter = nowEnter;
 }
 
+//============================================================
+// 描画処理
+//============================================================
 void ExplanationScene::Draw()
 {
     // 背景画像の描画

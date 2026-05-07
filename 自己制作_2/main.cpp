@@ -1,6 +1,10 @@
 #include "DxLib.h"
 #include "GameManager.h"
 
+//============================================================
+// アプリケーションのエントリーポイント
+// Windowsアプリの main 関数
+//============================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	// ウインドウモードで起動

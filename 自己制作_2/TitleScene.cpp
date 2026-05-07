@@ -4,8 +4,12 @@
 #include "ExplanationScene.h"
 #include "DxLib.h"
 
-const int GUIDE_X = 450;
-const int GUIDE_Y = 450;
+//============================================================
+// 描画用定数
+//============================================================
+const int GUIDE_X = 450; // 操作案内のX座標
+const int GUIDE_Y = 450; // 操作案内のY座標
+
 
 TitleScene::TitleScene()
 {
@@ -18,12 +22,18 @@ TitleScene::TitleScene()
    titleImage = LoadGraph(TEXT("Resource/title.png"));
 }
 
-// 使用した画像の解放
+//============================================
+// デストラクタ(使用した画像の解放)
+//===========================================
 TitleScene::~TitleScene()
 {
     DeleteGraph(titleImage);
 }
 
+
+//============================================================
+// 更新処理
+//============================================================
 void TitleScene::Update()
 {
     if (!isReady)
@@ -46,6 +56,10 @@ void TitleScene::Update()
     prevEnter = nowEnter;
 }
 
+
+//============================================================
+// 描画処理
+//============================================================
 void TitleScene::Draw()
 {
     // 背景画像の描画

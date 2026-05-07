@@ -20,12 +20,12 @@
 - 
 
 ## 起動方法
-1. `.sln` をVisual Studioで開く。
+1. `自己制作_2.sln` をVisual Studioで開く。
 2. ReleaseまたはDebugでビルドする。
 3. `exe` を起動する。
 
 ## 操作方法
-- 移動: A / D
+- 移動: W A S D
 - 攻撃: Space
 
 ## 既知の不具合

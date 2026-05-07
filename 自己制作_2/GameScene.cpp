@@ -4,6 +4,10 @@
 #include "GameClearScene.h" 
 #include "DxLib.h"
 
+//============================================================
+// 描画用定数
+//============================================================
+
 // ボス関連
 const int BOSS_TIME_X = 360;
 const int BOSS_TIME_Y = 0;
@@ -17,6 +21,10 @@ const int SCORE_Y = 0;
 const int HP_BLOCK_WIDTH = 30;       // 黒いHPバーの幅
 const int HP_BLOCK_HEIGHT = 20;      // 黒いHPバーの高さ
 
+
+//============================================================
+// コンストラクタ
+//============================================================
 GameScene::GameScene()
 {
 	// 背景画像のY座標
@@ -66,11 +74,16 @@ GameScene::GameScene()
 	score = 0;
 	maxHP = 10;
 	
+	// ポーズ
+	isPause = false;
+	prevEsc = 0;
 }
 
+//============================================================
+// デストラクタ(使用した画像・効果音の解放)
+//============================================================
 GameScene::~GameScene()
 {
-	// 使用した画像効果音の解放
 	DeleteGraph(bgImage);
 	DeleteGraph(playerImage);
 	DeleteGraph(bulletImage);
@@ -82,8 +95,23 @@ GameScene::~GameScene()
 	DeleteSoundMem(hitSE);
 }
 
+//============================================================
+// ゲームの更新処理
+//============================================================
 void GameScene::Update()
 {
+	int nowEsc = CheckHitKey(KEY_INPUT_ESCAPE);
+	if (nowEsc && !prevEsc)
+	{
+		isPause = !isPause;
+	}
+	prevEsc = nowEsc;
+
+
+	if (isPause)
+	{
+		return;
+	}
 
 	// 背景スクロール速度
 	bgY += 2; 
@@ -92,6 +120,7 @@ void GameScene::Update()
 	{
 		bgY = 0;
 	}
+
 
 	// プレイヤーの更新
 	player.Update();
@@ -262,8 +291,13 @@ void GameScene::Update()
 		enemies.end());
 }
 
+//============================================================
+// ゲームの描画処理
+//============================================================
 void GameScene::Draw()
 {
+	
+
 	// 背景画像描画(ループ)
 	DrawGraph(0, bgY, bgImage, TRUE);
 	DrawGraph(0, bgY - 600, bgImage, TRUE);
@@ -274,6 +308,7 @@ void GameScene::Draw()
 	// 弾描画
 	for (auto& b : bullets)
 	{
+		// 描画する画像を指定
 		b->Draw(bulletImage);
 	}
 
@@ -282,7 +317,7 @@ void GameScene::Draw()
 	{
 		int img = enemyImage1;
 
-		// 種類ごとに画像を変更
+		// 種類ごとに描画する画像を指定
 		switch (e->type)
 		{
 		case NORMAL:
@@ -301,6 +336,7 @@ void GameScene::Draw()
 	// ボス描画
 	if (boss)
 	{
+		// 描画する画像を指定
 		boss->Draw(bossImage);
 	}
 
@@ -329,5 +365,12 @@ void GameScene::Draw()
 		int g = 255 * i / maxHP;
 		int b = 0;
 		DrawBox(x + 2 + i * 30, y + 2, x + 28 + i * 30, y+18, GetColor(r, g, b), TRUE);
+	}
+
+	// ポーズを表示
+	SetFontSize(30);
+	if (isPause)
+	{
+		DrawString(260, 100, TEXT("PAUSE"), GetColor(255, 0, 0));
 	}
 }

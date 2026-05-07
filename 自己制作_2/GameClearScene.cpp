@@ -4,11 +4,15 @@
 #include "GameManager.h"
 #include "ResultScene.h"
 
-const int TITLE_TEXT_X = 230;
-const int TITLE_TEXT_Y = 200;
+//============================================================
+// 描画用定数
+//============================================================
 
-const int GUIDE_X = 450;
-const int GUIDE_Y = 450;
+const int TITLE_TEXT_X = 230; // タイトル文字のX座標
+const int TITLE_TEXT_Y = 200; // タイトル文字のY座標
+
+const int GUIDE_X = 450;      // 操作案内のX座標
+const int GUIDE_Y = 450;      // 操作案内のY座標
 
 GameClearScene::GameClearScene()
 {
@@ -19,12 +23,18 @@ GameClearScene::GameClearScene()
     bgImage = LoadGraph(TEXT("Resource/GameClear.png"));
 }
 
+//============================================================
+// デストラクタ(使用した画像の解放)
+//============================================================
 GameClearScene::~GameClearScene()
 {
     // 使用した画像の解放
     DeleteGraph(bgImage);
 }
 
+//============================================================
+// 更新処理
+//============================================================
 void GameClearScene::Update()
 {
     // Enterキー入力取得
@@ -40,6 +50,9 @@ void GameClearScene::Update()
     prevEnter = nowEnter;
 }
 
+//============================================================
+// 描画処理
+//============================================================
 void GameClearScene::Draw()
 {
     // 背景画像の描画

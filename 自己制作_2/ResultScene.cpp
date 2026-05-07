@@ -3,6 +3,38 @@
 #include "TitleScene.h"
 #include "GameManager.h"
 
+//============================================================
+// 描画用定数
+//============================================================
+
+const int TITLE_TEXT_X = 200; // タイトル文字のX座標
+const int TITLE_TEXT_Y = 10;  // タイトル文字のY座標
+
+
+const int SCORE_TEXT_X = 230; // スコア文字のX座標
+const int SCORE_TEXT_Y = 130; // スコア文字のY座標
+
+
+const int SCORE_X = 150;      // スコア数値のX座標
+const int SCORE_Y = 210;      // スコア数値のY座標
+
+
+const int GUIDE_X = 450;      // 操作案内のX座標
+const int GUIDE_Y = 450;      // 操作案内のY座標
+
+// 文字の色
+const int TEXT_COLOR = GetColor(0, 0, 0);
+
+// スコアの色
+const int SCORE_COLOR = GetColor(0, 255, 0);
+
+// 操作案内文字の色
+const int GUIDE_COLOR = GetColor(100, 100, 0);
+
+
+//============================================================
+// コンストラクタ
+//============================================================
 ResultScene::ResultScene()
 {
     // 画面サイズ取得
@@ -15,12 +47,20 @@ ResultScene::ResultScene()
     score = GameManager::GetInstance().GetScore();
 }
 
+
+//============================================================
+// デストラクタ
+//============================================================
 ResultScene::~ResultScene()
 {
     // 使用した画像の開放
     DeleteGraph(bgImage);
 }
 
+
+//============================================================
+// 更新処理
+//============================================================
 void ResultScene::Update()
 {
     // Enterキー入力取得
@@ -36,6 +76,10 @@ void ResultScene::Update()
     prevEnter = nowEnter;
 }
 
+
+//============================================================
+// 描画処理
+//============================================================
 void ResultScene::Draw()
 {
     // 背景画像の描画
@@ -43,16 +87,16 @@ void ResultScene::Draw()
     
     // リザルト表示
     SetFontSize(70);
-    DrawString(200, 10, TEXT("RESULT"), GetColor(0, 0, 0));
+    DrawString(TITLE_TEXT_X, TITLE_TEXT_Y, TEXT("RESULT"), TEXT_COLOR);
 
     // スコア表示
     SetFontSize(60);
-    DrawString(230, 130, TEXT("SCORE"), GetColor(0, 0, 0));
+    DrawString(SCORE_TEXT_X, SCORE_TEXT_Y, TEXT("SCORE"), TEXT_COLOR);
 
     SetFontSize(180);
-    DrawFormatString(150, 210, GetColor(0, 255, 0), TEXT("%d"), score);
+    DrawFormatString(SCORE_X, SCORE_Y, SCORE_COLOR, TEXT("%d"), score);
 
     // 操作案内
     SetFontSize(30);
-    DrawString(450, 450, TEXT("Press Enter"), GetColor(100, 100, 0));
+    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter"), GUIDE_COLOR);
 }
