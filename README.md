@@ -15,7 +15,7 @@
 - DxLib
 
 ## 工夫した点
-- 
+- TypingGame同様画面ごとにSceneを分割し、GameManagerで
 - 
 - 
 
