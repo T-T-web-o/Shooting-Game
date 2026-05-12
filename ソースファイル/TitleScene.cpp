@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "GameScene.h"
 #include "ExplanationScene.h"
+#include "SoundManager.h"
 #include "DxLib.h"
 
 //============================================================
@@ -30,7 +31,6 @@ TitleScene::~TitleScene()
     DeleteGraph(titleImage);
 }
 
-
 //============================================================
 // 更新処理
 //============================================================
@@ -46,10 +46,13 @@ void TitleScene::Update()
     }
     // Enterキー入力取得
     nowEnter = (CheckHitKey(KEY_INPUT_RETURN));
-
+   
     // Enterキーが押されたか判定
     if (nowEnter && !prevEnter)
     {
+        // 効果音再生
+        PlaySoundMem(SoundManager::titleSE, DX_PLAYTYPE_BACK);
+
         GameManager::GetInstance().ChangeScene(std::make_unique<ExplanationScene>());
     }
     // 前フレームの入力を保存

@@ -12,6 +12,9 @@ private:
 	// タイトル画像
 	int titleImage;
 
+	// SE
+	int titleSE;
+
 	// シーン切り替え時のバグ防止
 	bool isReady;
 
