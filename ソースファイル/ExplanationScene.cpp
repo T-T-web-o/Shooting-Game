@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "GameManager.h"
 #include "Player.h"
+#include "SoundManager.h"
 #include "DxLib.h"
 
 //============================================================
@@ -97,6 +98,9 @@ void ExplanationScene::Update()
     // Enterキーが押されたか判定
     if (nowEnter && !prevEnter)
     {
+        // 効果音再生
+        PlaySoundMem(SoundManager::titleSE, DX_PLAYTYPE_BACK);
+
         // ゲームシーンに移行
         GameManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
     }

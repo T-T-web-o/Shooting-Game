@@ -74,6 +74,10 @@ GameScene::GameScene()
 	// ポーズ
 	isPause = false;
 	prevEsc = 0;
+
+	// タイマー
+	waitTimer = 0;
+	isClear = false;
 }
 
 //============================================================
@@ -88,7 +92,6 @@ GameScene::~GameScene()
 	DeleteGraph(enemyImage3);
 	DeleteGraph(enemyImage2);
 	DeleteGraph(bossImage);
-	
 }
 
 //============================================================
@@ -96,6 +99,7 @@ GameScene::~GameScene()
 //============================================================
 void GameScene::Update()
 {
+	// Escでポーズ
 	int nowEsc = CheckHitKey(KEY_INPUT_ESCAPE);
 	if (nowEsc && !prevEsc)
 	{
@@ -120,6 +124,20 @@ void GameScene::Update()
 
 	// プレイヤーの更新
 	player.Update();
+
+	// ボス撃破
+	if (isClear)
+	{
+		waitTimer--;
+
+		if (waitTimer <= 0)
+		{
+			// クリアシーンへ移行
+			GameManager::GetInstance().SetScore(score);
+			GameManager::GetInstance().ChangeScene(std::make_unique<GameClearScene>());
+			return;
+		}
+	}
 
 	// 弾発射
 	int nowSpace = CheckHitKey(KEY_INPUT_SPACE);
@@ -241,10 +259,11 @@ void GameScene::Update()
 				// hpが0になったらクリア
 				if (boss->hp <= 0)
 				{
-					// クリアシーンへ移行
-					GameManager::GetInstance().SetScore(score);
-					GameManager::GetInstance().ChangeScene(std::make_unique<GameClearScene>());
-					return;
+					score += 500;
+					isClear = true;
+					waitTimer = 180;
+					boss->isDead = true;
+					boss.reset();
 				}
 				break;
 			}
@@ -286,6 +305,8 @@ void GameScene::Update()
 
 		}),
 		enemies.end());
+
+	
 }
 
 //============================================================
@@ -331,7 +352,7 @@ void GameScene::Draw()
 	}
 
 	// ボス描画
-	if (boss)
+	if (boss&& !boss->isDead)
 	{
 		// 描画する画像を指定
 		boss->Draw(bossImage);
@@ -339,13 +360,17 @@ void GameScene::Draw()
 
 	// ボス出現までの時間を表示
 	int remain = 1800 - bossTimer;
-	if (remain > 0)
+	if (remain > 0 && !isClear)
 	{
 		DrawFormatString(BOSS_TIME_X, BOSS_TIME_Y, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain / 60);
 	}
-	else
+	else if(remain<=0 && !isClear)
 	{
 		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス出現中！"), GetColor(255, 0, 0));
+	}
+	else
+	{
+		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス撃破！"), GetColor(255, 0, 0));
 	}
 	
 

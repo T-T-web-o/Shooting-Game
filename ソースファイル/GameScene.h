@@ -51,8 +51,13 @@ private:
 	int maxHP;
 	int hpWidth;
 
+	// É|Å[ÉY
 	bool isPause;
 	int prevEsc;
+
+	// BossåÇîj
+	int waitTimer;
+	bool isClear;
 public:
 
 	~GameScene();
