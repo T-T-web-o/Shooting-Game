@@ -12,9 +12,9 @@ int SoundManager::hitSE;
 void SoundManager::Load()
 {
 	// å¯â âπì«Ç›çûÇ›
-	titleSE = LoadSoundMem(TEXT("Resource/title.mp3"));
-	shotSE = LoadSoundMem(TEXT("Resource/shot.wav"));
-	hitSE = LoadSoundMem(TEXT("Resource/hit.wav"));
+	titleSE = LoadSoundMem(TEXT("Resource/bgm/title.mp3"));
+	shotSE = LoadSoundMem(TEXT("Resource/bgm/shot.wav"));
+	hitSE = LoadSoundMem(TEXT("Resource/bgm/hit.wav"));
 }
 
 void SoundManager::Release()

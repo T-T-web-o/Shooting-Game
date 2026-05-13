@@ -32,21 +32,21 @@ GameScene::GameScene()
 	bgY = 0;
 
 	// 背景画像
-	bgImage = LoadGraph(TEXT("Resource/background.png"));
+	bgImage = LoadGraph(TEXT("Resource/Model/background.png"));
 
 	// プレイヤー画像
-	playerImage = LoadGraph(TEXT("Resource/player.png"));
+	playerImage = LoadGraph(TEXT("Resource/Model/player.png"));
 
 	// 弾画像
-	bulletImage = LoadGraph(TEXT("Resource/bullet.png"));
+	bulletImage = LoadGraph(TEXT("Resource/Model/bullet.png"));
 
 	// 敵画像
-	enemyImage1 = LoadGraph(TEXT("Resource/enemy1.png"));
-	enemyImage2 = LoadGraph(TEXT("Resource/enemy2.png"));
-	enemyImage3 = LoadGraph(TEXT("Resource/enemy3.png"));
+	enemyImage1 = LoadGraph(TEXT("Resource/Model/enemy1.png"));
+	enemyImage2 = LoadGraph(TEXT("Resource/Model/enemy2.png"));
+	enemyImage3 = LoadGraph(TEXT("Resource/Model/enemy3.png"));
 	
 	// ボス画像
-	bossImage = LoadGraph(TEXT("Resource/boss.png"));
+	bossImage = LoadGraph(TEXT("Resource/Model/boss.png"));
 
 	// 画像サイズ取得
 	GetGraphSize(playerImage, &playerW, &playerH);

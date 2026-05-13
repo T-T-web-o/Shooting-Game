@@ -22,7 +22,7 @@ GameOverScene::GameOverScene()
     GetDrawScreenSize(&screenW, &screenH);
 
     // îwåiâÊëúì«Ç›çûÇ›
-    bgImage = LoadGraph(TEXT("Resource/GameOver.png"));
+    bgImage = LoadGraph(TEXT("Resource/Model/GameOver.png"));
 }
 
 //===========================================================

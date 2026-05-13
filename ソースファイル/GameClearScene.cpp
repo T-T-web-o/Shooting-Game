@@ -20,7 +20,7 @@ GameClearScene::GameClearScene()
     GetDrawScreenSize(&screenW, &screenH);
 
     // îwåiâÊëúì«Ç›çûÇ›
-    bgImage = LoadGraph(TEXT("Resource/GameClear.png"));
+    bgImage = LoadGraph(TEXT("Resource/Model/GameClear.png"));
 }
 
 //============================================================

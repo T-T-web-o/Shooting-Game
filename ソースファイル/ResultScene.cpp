@@ -41,7 +41,7 @@ ResultScene::ResultScene()
     GetDrawScreenSize(&screenW, &screenH);
 
     // 背景画像読み込み
-    bgImage = LoadGraph(TEXT("Resource/background.png"));
+    bgImage = LoadGraph(TEXT("Resource/Model/background.png"));
 
     // ゲームシーンのスコアを取得
     score = GameManager::GetInstance().GetScore();

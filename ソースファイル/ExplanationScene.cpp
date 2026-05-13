@@ -68,10 +68,10 @@ ExplanationScene::ExplanationScene()
     GetDrawScreenSize(&screenW, &screenH);
 
     // îwåiâÊëúì«Ç›çûÇ›
-    bgImage = LoadGraph(TEXT("Resource/Explanation.png"));
-    playerImage = LoadGraph(TEXT("Resource/player.png"));
-    enemyImage1 = LoadGraph(TEXT("Resource/enemy1.png"));
-    enemyImage2 = LoadGraph(TEXT("Resource/enemy2.png"));
+    bgImage = LoadGraph(TEXT("Resource/Model/Explanation.png"));
+    playerImage = LoadGraph(TEXT("Resource/Model/player.png"));
+    enemyImage1 = LoadGraph(TEXT("Resource/Model/enemy1.png"));
+    enemyImage2 = LoadGraph(TEXT("Resource/Model/enemy2.png"));
 }
 
 //============================================================
