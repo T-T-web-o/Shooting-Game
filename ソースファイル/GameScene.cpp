@@ -436,6 +436,9 @@ void GameScene::Draw()
 		DrawBox(x + 2 + i * 30, y + 2, x + 28 + i * 30, y+18, GetColor(r, g, b), TRUE);
 	}
 
+	// ボスHP表示
+	
+
 	// ポーズを表示
 	SetFontSize(30);
 	if (isPause)
