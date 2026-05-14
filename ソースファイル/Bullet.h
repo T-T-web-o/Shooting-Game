@@ -1,8 +1,6 @@
 #pragma once
 class Bullet
 {
-private:
-
 public:
 
 	// åªç›à íu

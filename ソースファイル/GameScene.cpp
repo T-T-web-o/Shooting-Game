@@ -48,6 +48,12 @@ GameScene::GameScene()
 	// ボス画像
 	bossImage = LoadGraph(TEXT("Resource/Model/boss.png"));
 
+	// エフェクト画像
+	effectImage1 = LoadGraph(TEXT("Resource/Model/effect1.png"));
+	effectImage2 = LoadGraph(TEXT("Resource/Model/effect2.png"));
+	effectImage3 = LoadGraph(TEXT("Resource/Model/effect3.png"));
+	bossEffectImage = LoadGraph(TEXT("Resource/Model/bossEffect.png"));
+
 	// 画像サイズ取得
 	GetGraphSize(playerImage, &playerW, &playerH);
 	GetGraphSize(enemyImage1, &enemyW, &enemyH);
@@ -78,6 +84,8 @@ GameScene::GameScene()
 	// タイマー
 	waitTimer = 0;
 	isClear = false;
+
+	
 }
 
 //============================================================
@@ -92,6 +100,10 @@ GameScene::~GameScene()
 	DeleteGraph(enemyImage3);
 	DeleteGraph(enemyImage2);
 	DeleteGraph(bossImage);
+	DeleteGraph(effectImage1);
+	DeleteGraph(effectImage2);
+	DeleteGraph(effectImage3);
+	DeleteGraph(bossEffectImage);
 }
 
 //============================================================
@@ -169,6 +181,12 @@ void GameScene::Update()
 		boss->Update();
 	}
 
+	// エフェクト更新
+	for (auto& ef : effects)
+	{
+		ef->Update();
+	}
+
 	// 敵を生成(ボス出現で削除)
 	spawnTimer++;
 	if (!isBoss && spawnTimer > 60)
@@ -208,6 +226,22 @@ void GameScene::Update()
 						break;
 					}
 					e->isDead = true;
+
+					int efImage = effectImage1;
+
+					switch (e->type)
+					{
+					case NORMAL:
+						efImage = effectImage1;
+						break;
+					case FAST:
+						efImage = effectImage2;
+						break;
+					case ZIGZAG:
+						efImage = effectImage3;
+						break;
+					}
+					effects.push_back(std::make_unique<Effect>(e->x + enemyW / 2, e->y + enemyH / 2, efImage));
 				}
 				break;
 			}
@@ -260,6 +294,9 @@ void GameScene::Update()
 				if (boss->hp <= 0)
 				{
 					score += 500;
+
+					effects.push_back(std::make_unique<Effect>(boss->x + bossW / 2, boss->y + bossH / 2, bossEffectImage));
+
 					isClear = true;
 					waitTimer = 180;
 					boss->isDead = true;
@@ -306,7 +343,13 @@ void GameScene::Update()
 		}),
 		enemies.end());
 
-	
+	// ===== エフェクトを削除 =====
+	effects.erase(std::remove_if(effects.begin(), effects.end(),
+		[](const std::unique_ptr<Effect>& ef)
+		{
+			return ef->isDead;
+		}),
+		effects.end());
 }
 
 //============================================================
@@ -314,8 +357,6 @@ void GameScene::Update()
 //============================================================
 void GameScene::Draw()
 {
-	
-
 	// 背景画像描画(ループ)
 	DrawGraph(0, bgY, bgImage, TRUE);
 	DrawGraph(0, bgY - 600, bgImage, TRUE);
@@ -356,6 +397,12 @@ void GameScene::Draw()
 	{
 		// 描画する画像を指定
 		boss->Draw(bossImage);
+	}
+
+	// エフェクト描画
+	for (auto& ef : effects)
+	{
+		ef->Draw();
 	}
 
 	// ボス出現までの時間を表示

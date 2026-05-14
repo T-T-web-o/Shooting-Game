@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include "Boss.h"
+#include "Effect.h"
 #include <vector>
 #include <memory>
 
@@ -17,8 +18,10 @@ private:
 	std::vector<std::unique_ptr<Bullet>>bullets;
 	std::vector<std::unique_ptr<Enemy>>enemies;
 	std::unique_ptr<Boss>boss;
+	std::vector<std::unique_ptr<Effect>>effects;
 
 	bool isBoss;
+
 	// 画像
 	int bgY; // 背景のスクロール位置
 	int bgImage;
@@ -28,12 +31,17 @@ private:
 	int enemyImage2;
 	int enemyImage3;
 	int bossImage;
+	int effectImage1;
+	int effectImage2;
+	int effectImage3;
+	int bossEffectImage;
 
 	// 画像サイズ
 	int playerW, playerH;
 	int enemyW, enemyH;
 	int bulletW, bulletH;
 	int bossW, bossH;
+	int effectW, effectH;
 
 	// 画面サイズ取得
 	int screenW;
