@@ -30,7 +30,9 @@
 なので画像変更後も当たり判定を調整しやすくなっています。
 - プレイヤーがダメージを受けた際に無敵時間を設けることで理不尽な多重ヒットでのゲームオーバーを防ぎました。
 
+## Portfolio
+https://drive.google.com/file/d/1IdMafgDVxxM5E5YZ0G2zzIBvu6sAUSTJ/view?usp=sharing
+
 ## Gameplay Video
-プレイ動画URL
 https://youtu.be/VLBq4qwnI34
 
