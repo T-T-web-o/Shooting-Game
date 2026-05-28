@@ -139,6 +139,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Scene.h" />

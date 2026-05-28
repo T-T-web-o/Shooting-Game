@@ -5,10 +5,6 @@ class TitleScene : public Scene
 {
 private:
 
-	// “ü—ÍŠÇ—
-	bool prevEnter;
-	bool nowEnter;
-	
 	// ƒ^ƒCƒgƒ‹‰æ‘œ
 	int titleImage;
 

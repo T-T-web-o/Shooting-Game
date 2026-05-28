@@ -3,6 +3,7 @@
 #include "TitleScene.h"
 #include "GameManager.h"
 #include "ResultScene.h"
+#include "Input.h"
 
 //============================================================
 // 描画用定数
@@ -37,17 +38,13 @@ GameClearScene::~GameClearScene()
 //============================================================
 void GameClearScene::Update()
 {
-    // Enterキー入力取得
-    nowEnter = (CheckHitKey(KEY_INPUT_RETURN));
 
     // Enterキーが押されたか判定
-    if (nowEnter && !prevEnter)
+    if (Input::IsTriggerEnter())
     {
         // タイトルシーンに移行
         GameManager::GetInstance().ChangeScene(std::make_unique<ResultScene>());
     }
-    // 前フレームの入力を保存
-    prevEnter = nowEnter;
 }
 
 //============================================================

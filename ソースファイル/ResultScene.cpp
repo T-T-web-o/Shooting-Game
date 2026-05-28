@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "TitleScene.h"
 #include "GameManager.h"
+#include "Input.h"
 
 //============================================================
 // 描画用定数
@@ -63,17 +64,13 @@ ResultScene::~ResultScene()
 //============================================================
 void ResultScene::Update()
 {
-    // Enterキー入力取得
-    nowEnter = (CheckHitKey(KEY_INPUT_RETURN));
 
     // Enterキーが押されたか判定
-    if (nowEnter && !prevEnter)
+    if (Input::IsTriggerEnter())
     {
         // タイトルシーンへ移行
         GameManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
     }
-    // 前フレームの入力を保存
-    prevEnter = nowEnter;
 }
 
 

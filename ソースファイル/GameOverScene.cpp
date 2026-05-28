@@ -1,6 +1,7 @@
 #include "GameOverScene.h"
 #include "GameManager.h"
 #include "TitleScene.h"
+#include "Input.h"
 #include "DxLib.h"
 
 //============================================================
@@ -38,17 +39,12 @@ GameOverScene::~GameOverScene()
 //============================================================
 void GameOverScene::Update()
 {
-    // Enterキー入力取得
-    nowEnter = (CheckHitKey(KEY_INPUT_RETURN));
-
     // Enterキーが押されたか判定
-    if (nowEnter && !prevEnter)
+    if (Input::IsTriggerEnter())
     {
         // タイトルシーンへ移行
         GameManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
     }
-    // 前フレームの入力を保存
-    prevEnter = nowEnter;
 }
 
 //============================================================

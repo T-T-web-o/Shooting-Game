@@ -4,9 +4,6 @@
 class GameOverScene : public Scene
 {
 private:
-	// “ü—ÍŠÇ—
-	bool prevEnter;
-	bool nowEnter;
 
 	// ”wŒi‰æ‘œ
 	int bgImage;
