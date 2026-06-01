@@ -1,5 +1,4 @@
 #include "Bullet.h"
-#include "GameScene.h"
 #include "DxLib.h"
 
 //============================================================

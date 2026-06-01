@@ -33,7 +33,8 @@ Enemy::Enemy()
 	{
 		type = ZIGZAG;
 	}
-
+	// 20“‚ÌŠm—¦‚Å•…‚é
+	isRotten= (rand() % 100 < 20);
 
 	// ‘Ì—Í‚Ì‰Šú‰»
 	switch (type)
@@ -45,8 +46,13 @@ Enemy::Enemy()
 		hp = 200;
 		break;
 	case ZIGZAG:
-		hp = 200;
+		hp = 300;
 		break;
+	}
+
+	if (isRotten)
+	{
+		hp = 100;
 	}
 }
 

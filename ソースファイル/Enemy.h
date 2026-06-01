@@ -24,6 +24,9 @@ public:
 	// 敵の種類
 	EnemyType type;
 
+	// 腐るフラグ 
+	bool isRotten;
+
 	// コンストラクタ　
 	Enemy();
 

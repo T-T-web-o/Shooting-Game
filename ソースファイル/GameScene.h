@@ -20,7 +20,25 @@ private:
 	std::unique_ptr<Boss>boss;
 	std::vector<std::unique_ptr<Effect>>effects;
 
+	// ボス出現フラグ
 	bool isBoss;
+
+	// 更新処理
+	void UpdateBullet();
+	void UpdateEnemy();
+	void UpdateBoss();
+	void UpdateEffect();
+
+	// 削除処理
+	void RemoveDeadObjects();
+
+	// 当たり判定
+	void CollisionBulletEnemy();
+	void CollisionPlayerEnemy();
+	void CollisionBulletBoss();
+	void CollisionPlayerBoss();
+
+
 
 	// 画像
 	int bgY; // 背景のスクロール位置
@@ -30,6 +48,9 @@ private:
 	int enemyImage1;
 	int enemyImage2;
 	int enemyImage3;
+	int rottenImage1;
+	int rottenImage2;
+	int rottenImage3;
 	int bossImage;
 	int effectImage1;
 	int effectImage2;

@@ -45,6 +45,11 @@ GameScene::GameScene()
 	enemyImage2 = LoadGraph(TEXT("Resource/Model/enemy2.png"));
 	enemyImage3 = LoadGraph(TEXT("Resource/Model/enemy3.png"));
 	
+	// 腐った敵画像
+	rottenImage1 = LoadGraph(TEXT("Resource/model/rotten1.png"));
+	rottenImage2 = LoadGraph(TEXT("Resource/model/rotten2.png"));
+	rottenImage3 = LoadGraph(TEXT("Resource/model/rotten3.png"));
+
 	// ボス画像
 	bossImage = LoadGraph(TEXT("Resource/Model/boss.png"));
 
@@ -133,22 +138,27 @@ void GameScene::Update()
 		bgY = 0;
 	}
 
-
 	// プレイヤーの更新
 	player.Update();
 
-	// ボス撃破
-	if (isClear)
-	{
-		waitTimer--;
+	// 弾の更新
+	UpdateBullet();
 
-		if (waitTimer <= 0)
-		{
-			// クリアシーンへ移行
-			GameManager::GetInstance().SetScore(score);
-			GameManager::GetInstance().ChangeScene(std::make_unique<GameClearScene>());
-			return;
-		}
+	// 敵の更新
+	UpdateEnemy();
+
+	// ボスの更新
+	UpdateBoss();
+
+	// エフェクトの更新
+	UpdateEffect();
+
+	// 敵を生成(ボス出現で削除)
+    spawnTimer++;
+	if (!isBoss && spawnTimer > 60)
+	{
+		enemies.push_back(std::make_unique<Enemy>());
+		spawnTimer = 0;
 	}
 
 	// 弾発射
@@ -163,45 +173,125 @@ void GameScene::Update()
 	}
 	prevSpace = nowSpace;
 
-	// 弾更新
+	// 弾と敵の当たり判定
+	CollisionBulletEnemy();
+
+	// プレイヤーと敵の当たり判定
+	CollisionPlayerEnemy();
+
+	// Boss出現
+	bossTimer++;
+
+	if (!isBoss && bossTimer > 1800)
+	{
+		isBoss = true;
+		boss = std::make_unique<Boss>();
+	}
+
+	// 弾とボスの当たり判定
+	CollisionBulletBoss();
+	
+	// プレイヤーとボスの当たり判定
+	CollisionPlayerBoss();
+	
+	// ボス撃破
+	if (isClear)
+	{
+		waitTimer--;
+
+		if (waitTimer <= 0)
+		{
+			// クリアシーンへ移行
+			GameManager::GetInstance().SetScore(score);
+			GameManager::GetInstance().ChangeScene(std::make_unique<GameClearScene>());
+			return;
+		}
+	}
+
+	// 不要オブジェクトの削除
+	RemoveDeadObjects();	
+}
+
+//============================================================
+// 弾・敵・ボス・エフェクトの更新
+//============================================================
+void GameScene::UpdateBullet()
+{
+	
 	for (auto& b : bullets)
 	{
 		b->Update();
 	}
+}
 
-	// 敵更新
+void GameScene::UpdateEnemy()
+{
+	
 	for (auto& e : enemies)
 	{
 		e->Update();
 	}
+}
 
-	// ボス更新
+void GameScene::UpdateBoss()
+{
 	if (boss)
 	{
 		boss->Update();
 	}
+}
 
-	// エフェクト更新
+void GameScene::UpdateEffect()
+{
 	for (auto& ef : effects)
 	{
 		ef->Update();
 	}
+}
 
-	// 敵を生成(ボス出現で削除)
-	spawnTimer++;
-	if (!isBoss && spawnTimer > 60)
-	{
-		enemies.push_back(std::make_unique<Enemy>());
-		spawnTimer = 0;
-	}
+//============================================================
+// 不要オブジェクトの削除
+//============================================================
+void GameScene::RemoveDeadObjects()
+{
+	// ===== 弾を削除 =====
+	bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
+		[](const std::unique_ptr<Bullet>& b)
+		{
+			return b->isDead;
+		}),
+		bullets.end());
 
+	// ===== 敵を削除 =====
+	enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
+		[](const std::unique_ptr<Enemy>& e)
+		{
+			return e->isDead;
+
+		}),
+		enemies.end());
+
+	// ===== エフェクトを削除 =====
+	effects.erase(std::remove_if(effects.begin(), effects.end(),
+		[](const std::unique_ptr<Effect>& ef)
+		{
+			return ef->isDead;
+		}),
+		effects.end());
+}
+
+//============================================================
+//  当たり判定
+//============================================================
+void GameScene::CollisionBulletEnemy()
+{
 	// 敵と弾の当たり判定
 	for (auto& b : bullets)
 	{
 		for (auto& e : enemies)
 		{
 			// 当たり判定
-			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 && 
+			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 &&
 				abs(b->y - e->y) < (bulletH + enemyH) / 2)
 			{
 				// 弾ヒット時に効果音再生
@@ -213,17 +303,37 @@ void GameScene::Update()
 				// hpが0になったら削除
 				if (e->hp <= 0)
 				{
-					switch (e->type)
+					// 腐っていたらスコアマイナス
+					if (e->isRotten)
 					{
-					case NORMAL:
-						score += 100;
-						break;
-					case FAST:
-						score += 200;
-						break;
-					case ZIGZAG:
-						score += 300;
-						break;
+						switch (e->type)
+						{
+						case NORMAL:
+							score -= 100;
+							break;
+						case FAST:
+							score -= 200;
+							break;
+						case ZIGZAG:
+							score -= 300;
+							break;
+						}
+					}
+					// 腐ってなかったらスコアプラス
+					else
+					{
+						switch (e->type)
+						{
+						case NORMAL:
+							score += 100;
+							break;
+						case FAST:
+							score += 200;
+							break;
+						case ZIGZAG:
+							score += 300;
+							break;
+						}
 					}
 					e->isDead = true;
 
@@ -247,8 +357,11 @@ void GameScene::Update()
 			}
 		}
 	}
+}
 
-	// 敵とプレイヤーの当たり判定
+// 敵とプレイヤーの当たり判定
+void GameScene::CollisionPlayerEnemy()
+{
 	for (auto& e : enemies)
 	{
 		if (abs(player.x - e->x) < (playerW + enemyW) / 3 &&
@@ -267,17 +380,11 @@ void GameScene::Update()
 			}
 		}
 	}
+}
 
-	// Boss出現
-	bossTimer++;
-
-	if (!isBoss && bossTimer > 1800)
-	{
-		isBoss = true;
-		boss = std::make_unique<Boss>();
-	}
-
-	// ボスと弾の当たり判定
+// ボスと弾の当たり判定
+void GameScene::CollisionBulletBoss()
+{
 	if (boss)
 	{
 		for (auto& b : bullets)
@@ -306,11 +413,14 @@ void GameScene::Update()
 			}
 		}
 	}
+}
 
-	// ボスとプレイヤーの当たり判定
+// ボスとプレイヤーの当たり判定
+void GameScene::CollisionPlayerBoss()
+{
 	if (boss)
 	{
-		if (abs(player.x - boss->x) < (playerW + bossW) / 2 - 5 && 
+		if (abs(player.x - boss->x) < (playerW + bossW) / 2 - 5 &&
 			abs(player.y - boss->y) < (playerH + bossH) / 2 - 5)
 		{
 			if (player.InvincibilityTimer == 0)
@@ -325,31 +435,6 @@ void GameScene::Update()
 			}
 		}
 	}
-
-	// ===== 弾を削除 =====
-	bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
-		[](const std::unique_ptr<Bullet>& b)
-		{
-			return b->isDead;
-		}),
-		bullets.end());
-
-	// ===== 敵を削除 =====
-	enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
-		[](const std::unique_ptr<Enemy>& e)
-		{
-			return e->isDead;
-
-		}),
-		enemies.end());
-
-	// ===== エフェクトを削除 =====
-	effects.erase(std::remove_if(effects.begin(), effects.end(),
-		[](const std::unique_ptr<Effect>& ef)
-		{
-			return ef->isDead;
-		}),
-		effects.end());
 }
 
 //============================================================
@@ -377,17 +462,35 @@ void GameScene::Draw()
 		int img = enemyImage1;
 
 		// 種類ごとに描画する画像を指定
-		switch (e->type)
+		if (e->isRotten)
 		{
-		case NORMAL:
-			img = enemyImage1;
-			break;
-		case FAST:
-			img = enemyImage2;
-			break;
-		case ZIGZAG:
-			img = enemyImage3;
-			break;
+			switch (e->type)
+			{
+			case NORMAL:
+				img = rottenImage1;
+				break;
+			case FAST:
+				img = rottenImage2;
+				break;
+			case ZIGZAG:
+				img = rottenImage3;
+				break;
+			}
+		}
+		else
+		{
+			switch (e->type)
+			{
+			case NORMAL:
+				img = enemyImage1;
+				break;
+			case FAST:
+				img = enemyImage2;
+				break;
+			case ZIGZAG:
+				img = enemyImage3;
+				break;
+			}
 		}
 		e->Draw(img);
 	}

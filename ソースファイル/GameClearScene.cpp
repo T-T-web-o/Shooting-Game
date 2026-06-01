@@ -15,6 +15,9 @@ const int TITLE_TEXT_Y = 200; // タイトル文字のY座標
 const int GUIDE_X = 450;      // 操作案内のX座標
 const int GUIDE_Y = 450;      // 操作案内のY座標
 
+// 文字の色(黒)
+const int COLOR_TEXT = GetColor(0, 0, 0);
+const int CLEAR_TEXT = GetColor(255, 255, 0);
 GameClearScene::GameClearScene()
 {
     // 画面サイズ取得
@@ -57,7 +60,7 @@ void GameClearScene::Draw()
 
     // GAME CLEARを描画
     SetFontSize(40);
-    DrawString(TITLE_TEXT_X, TITLE_TEXT_Y, TEXT("GAME CLEAR"), GetColor(255, 255, 0));
+    DrawString(TITLE_TEXT_X, TITLE_TEXT_Y, TEXT("GAME CLEAR"), CLEAR_TEXT);
     
     // 操作案内
     SetFontSize(15);
