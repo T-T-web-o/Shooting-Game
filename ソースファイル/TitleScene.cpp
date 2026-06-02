@@ -12,7 +12,7 @@
 const int GUIDE_X = 450; // ‘€ìˆÄ“à‚ÌXÀ•W
 const int GUIDE_Y = 450; // ‘€ìˆÄ“à‚ÌYÀ•W
 
-
+const int TEXT_COLOR = GetColor(0, 0, 0); // •¶š‚ÌF
 TitleScene::TitleScene()
 {
    isReady = false;
@@ -66,5 +66,5 @@ void TitleScene::Draw()
     DrawExtendGraph(0, 0, screenW, screenH, titleImage, TRUE);
 
     SetFontSize(30);
-    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter"), GetColor(0, 0, 0));
+    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter"), TEXT_COLOR);
 }

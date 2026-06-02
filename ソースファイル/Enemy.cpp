@@ -21,7 +21,7 @@ const int NORMAL_SPEED = 2;          // ’Êí“G‚Ì‘¬“x
 const int FAST_SPEED = 4;            // ‚‘¬“G‚Ì‘¬“x
 
 const float ZIGZAG_FREQ = 0.05f;     // —h‚ê‚Ì‘¬‚³
-const int ZIGZAG_AMPLITUDE = 50;     // ‰¡—h‚ê‚Ì‘å‚«‚³
+const int ZIGZAG_RANGE = 50;     // ‰¡—h‚ê‚Ì‘å‚«‚³
 
 const int SCREEN_HEIGHT = 500;       // ‰æ–Ê‚Ìc•
 
@@ -96,7 +96,7 @@ void Enemy::Update()
 		break;
 	case ZIGZAG:
 		y += NORMAL_SPEED;
-		x = baseX + static_cast<int>(sin(y * ZIGZAG_FREQ) * ZIGZAG_AMPLITUDE);
+		x = baseX + static_cast<int>(sin(y * ZIGZAG_FREQ) * ZIGZAG_RANGE);
 		break;
 	}
 	

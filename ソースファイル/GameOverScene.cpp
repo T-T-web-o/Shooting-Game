@@ -14,6 +14,9 @@ const int TITLE_TEXT_Y = 200; // タイトル文字のY座標
 const int GUIDE_X = 450;      // 操作案内X座標
 const int GUIDE_Y = 460;      // 操作案内Y座標
 
+const int GAMEOVER_TEXT = GetColor(255, 0, 0);   // ゲームオーバー文字の色
+const int DUIDE_TEXT = GetColor(255, 255, 255);  // 操作案内文字の色
+
 //============================================================
 // コンストラクタ
 //============================================================
@@ -57,9 +60,9 @@ void GameOverScene::Draw()
 
     // GAME OVER を描画
     SetFontSize(40);
-    DrawString(TITLE_TEXT_X, TITLE_TEXT_Y, TEXT("GAME OVER"), GetColor(255, 0, 0));
+    DrawString(TITLE_TEXT_X, TITLE_TEXT_Y, TEXT("GAME OVER"), GAMEOVER_TEXT);
 
     // 操作案内
     SetFontSize(15);
-    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter to Title"), GetColor(255, 255, 255));
+    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter to Title"), DUIDE_TEXT);
 }

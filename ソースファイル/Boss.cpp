@@ -3,16 +3,27 @@
 #include <cmath>
 
 //============================================================
+// 定数
+//============================================================
+const int BOSS_START_X = 200;  // ボスの出現X座標
+const int BOSS_START_Y = 50;   // ボスの初期Y座標（画面外上）
+
+const int BOSS_HP = 2000;      // ボスの体力 
+
+const int BOSS_CENTER_X = 200;      // ボス移動の中心X座標
+const float BOSS_MOVE_FREQ = 0.05f; // 左右移動の速さ
+const int BOSS_MOVE_RANGE = 100;    // 左右移動の幅
+//============================================================
 // コンストラクタ（ボスの初期化）
 //============================================================
 Boss::Boss()
 {
 	// 初期位置設定
-	x = 200;
-	y = 50;
+	x = BOSS_START_X;
+	y = BOSS_START_Y;
 
 	// 体力設定
-	hp = 2000;
+	hp = BOSS_HP;
 
 	// 生存状態
 	isDead = false;
@@ -30,7 +41,7 @@ void Boss::Update()
 	t++;
 
 	// sinをつかってボスを左右に移動
-	x = 200 + static_cast<int>(sin(t * 0.05) * 100);
+	x = BOSS_CENTER_X + static_cast<int>(sin(t * BOSS_MOVE_FREQ) * BOSS_MOVE_RANGE);
 	
 }
 

@@ -9,19 +9,53 @@
 // 描画用定数
 //============================================================
 
-// ボス関連
-const int BOSS_TIME_X = 360;
-const int BOSS_TIME_Y = 0;
-const int BOSS_TEXT_X = 400;
+const int MAX_HP = 10;
 
-// スコア
-const int SCORE_X = 0;
-const int SCORE_Y = 0;
+const int BOSS_TIME_X = 360;  // ボス出現時間座標X
+const int BOSS_TIME_Y = 0;    // ボス出現時間座標Y
+const int BOSS_TEXT_X = 400;  // ボス関連テキストX
 
-// HPバー
-const int HP_BLOCK_WIDTH = 30;       // 黒いHPバーの幅
-const int HP_BLOCK_HEIGHT = 20;      // 黒いHPバーの高さ
+const int SCORE_X = 0;        // スコア座標X
+const int SCORE_Y = 0;        // スコア座標Y
 
+const int HP_BLOCK_WIDTH = 30;     // 黒いHPバーの幅
+const int HP_BLOCK_HEIGHT = 20;    // 黒いHPバーの高さ
+
+const int BG_SCROLL_SPEED = 2;     // 背景スクロール速度
+const int BG_HEIGHT = 600;         // 背景画像の高さ
+
+const int ENEMY_SPAWN_TIME = 60;   // 敵の出現間隔
+const int BOSS_APPEAR_TIME = 1800; // ボス出現までの時間
+const int CLEAR_WAIT_TIME = 60;    // ボス撃破後の待機時間
+
+const int INVINCIBLE_TIME = 60;    // 無敵時間
+
+const int NORMAL_SCORE = 100;   // 通常敵のスコア増減値
+const int FAST_SCORE = 200;     // 高速敵のスコア増減値
+const int ZIGZAG_SCORE = 300;   // ジグザグ敵のスコア増減値
+const int BOSS_SCORE = 500;     // ボス撃破時のスコア
+
+const int PAUSE_TEXT_X = 260;   // ボーズテキストX座標
+const int PAUSE_TEXT_Y = 100;   // ポーズテキストY座標
+
+const int PLAYER_ENEMY_HIT_DIV = 3;    // プレイヤーと敵の当たり判定縮小率
+const int PLAYER_BOSS_HIT_DIV = 2;     // プレイヤーとボスの当たり判定縮小率
+const int PLAYER_BOSS_HIT_OFFSET = 5;  // プレイヤーとボスの当たり判定補正値
+const int BULLET_BOSS_HIT_DIV = 3;     // 弾とボスの当たり判定縮小率
+const int BULLET_ENEMY_HIT_DIV = 2;    // 弾と敵の当たり判定縮小率
+
+const int HP_BAR_X = 10;    // HPバーX座標
+const int HP_BAR_Y = 450;   // HPバーY座標
+const int CENTER_DIV = 2;   // 画像中央計算用
+const int FPS = 60;   // 1秒あたりのフレーム数
+
+// テキストカラー
+const int COLOR_RED = GetColor(255, 0, 0);
+const int COLOR_GREEN = GetColor(0, 255, 0);
+const int COLOR_BLACK = GetColor(0, 0, 0);
+
+// ポーズフォントサイズ
+const int PAUSE_FONT_SIZE = 30;
 
 //============================================================
 // コンストラクタ
@@ -80,7 +114,7 @@ GameScene::GameScene()
 
 	// UI
 	score = 0;
-	maxHP = 10;
+	maxHP = MAX_HP;
 	
 	// ポーズ
 	isPause = false;
@@ -89,8 +123,6 @@ GameScene::GameScene()
 	// タイマー
 	waitTimer = 0;
 	isClear = false;
-
-	
 }
 
 //============================================================
@@ -131,9 +163,9 @@ void GameScene::Update()
 	}
 
 	// 背景スクロール速度
-	bgY += 2; 
+	bgY += BG_SCROLL_SPEED;
 
-	if (bgY >= 600)
+	if (bgY >= BG_HEIGHT)
 	{
 		bgY = 0;
 	}
@@ -155,7 +187,7 @@ void GameScene::Update()
 
 	// 敵を生成(ボス出現で削除)
     spawnTimer++;
-	if (!isBoss && spawnTimer > 60)
+	if (!isBoss && spawnTimer > ENEMY_SPAWN_TIME)
 	{
 		enemies.push_back(std::make_unique<Enemy>());
 		spawnTimer = 0;
@@ -182,7 +214,7 @@ void GameScene::Update()
 	// Boss出現
 	bossTimer++;
 
-	if (!isBoss && bossTimer > 1800)
+	if (!isBoss && bossTimer > BOSS_APPEAR_TIME)
 	{
 		isBoss = true;
 		boss = std::make_unique<Boss>();
@@ -291,8 +323,8 @@ void GameScene::CollisionBulletEnemy()
 		for (auto& e : enemies)
 		{
 			// 当たり判定
-			if (abs(b->x - e->x) < (bulletW + enemyW) / 2 &&
-				abs(b->y - e->y) < (bulletH + enemyH) / 2)
+			if (abs(b->x - e->x) < (bulletW + enemyW) / BULLET_ENEMY_HIT_DIV &&
+				abs(b->y - e->y) < (bulletH + enemyH) / BULLET_ENEMY_HIT_DIV)
 			{
 				// 弾ヒット時に効果音再生
 				PlaySoundMem(SoundManager::hitSE, DX_PLAYTYPE_BACK);
@@ -309,13 +341,13 @@ void GameScene::CollisionBulletEnemy()
 						switch (e->type)
 						{
 						case NORMAL:
-							score -= 100;
+							score -= NORMAL_SCORE;
 							break;
 						case FAST:
-							score -= 200;
+							score -= FAST_SCORE;
 							break;
 						case ZIGZAG:
-							score -= 300;
+							score -= ZIGZAG_SCORE;
 							break;
 						}
 					}
@@ -325,13 +357,13 @@ void GameScene::CollisionBulletEnemy()
 						switch (e->type)
 						{
 						case NORMAL:
-							score += 100;
+							score += NORMAL_SCORE;
 							break;
 						case FAST:
-							score += 200;
+							score += FAST_SCORE;
 							break;
 						case ZIGZAG:
-							score += 300;
+							score += ZIGZAG_SCORE;
 							break;
 						}
 					}
@@ -351,7 +383,7 @@ void GameScene::CollisionBulletEnemy()
 						efImage = effectImage3;
 						break;
 					}
-					effects.push_back(std::make_unique<Effect>(e->x + enemyW / 2, e->y + enemyH / 2, efImage));
+					effects.push_back(std::make_unique<Effect>(e->x + enemyW / CENTER_DIV, e->y + enemyH / CENTER_DIV, efImage));
 				}
 				break;
 			}
@@ -364,14 +396,14 @@ void GameScene::CollisionPlayerEnemy()
 {
 	for (auto& e : enemies)
 	{
-		if (abs(player.x - e->x) < (playerW + enemyW) / 3 &&
-			abs(player.y - e->y) < (playerH + enemyH) / 3)
+		if (abs(player.x - e->x) < (playerW + enemyW) / PLAYER_ENEMY_HIT_DIV &&
+			abs(player.y - e->y) < (playerH + enemyH) / PLAYER_ENEMY_HIT_DIV)
 		{
 			if (player.InvincibilityTimer == 0)
 			{
 				e->isDead = true;
 				player.hp--;
-				player.InvincibilityTimer = 60;
+				player.InvincibilityTimer = INVINCIBLE_TIME;
 				if (player.hp <= 0)
 				{
 					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
@@ -389,8 +421,8 @@ void GameScene::CollisionBulletBoss()
 	{
 		for (auto& b : bullets)
 		{
-			if (abs(b->x - boss->x) < (bulletW + bossW) / 3 &&
-				abs(b->y - boss->y) < (bulletH + bossH) / 3)
+			if (abs(b->x - boss->x) < (bulletW + bossW) / BULLET_BOSS_HIT_DIV &&
+				abs(b->y - boss->y) < (bulletH + bossH) / BULLET_BOSS_HIT_DIV)
 			{
 				// 弾ヒット時に効果音再生
 				PlaySoundMem(SoundManager::hitSE, DX_PLAYTYPE_BACK);
@@ -400,12 +432,12 @@ void GameScene::CollisionBulletBoss()
 				// hpが0になったらクリア
 				if (boss->hp <= 0)
 				{
-					score += 500;
+					score += BOSS_SCORE;
 
-					effects.push_back(std::make_unique<Effect>(boss->x + bossW / 2, boss->y + bossH / 2, bossEffectImage));
+					effects.push_back(std::make_unique<Effect>(boss->x + bossW / CENTER_DIV, boss->y + bossH / CENTER_DIV, bossEffectImage));
 
 					isClear = true;
-					waitTimer = 180;
+					waitTimer = CLEAR_WAIT_TIME;
 					boss->isDead = true;
 					boss.reset();
 				}
@@ -420,13 +452,13 @@ void GameScene::CollisionPlayerBoss()
 {
 	if (boss)
 	{
-		if (abs(player.x - boss->x) < (playerW + bossW) / 2 - 5 &&
-			abs(player.y - boss->y) < (playerH + bossH) / 2 - 5)
+		if (abs(player.x - boss->x) < (playerW + bossW) / PLAYER_BOSS_HIT_DIV - PLAYER_BOSS_HIT_OFFSET &&
+			abs(player.y - boss->y) < (playerH + bossH) / PLAYER_BOSS_HIT_DIV - PLAYER_BOSS_HIT_OFFSET)
 		{
 			if (player.InvincibilityTimer == 0)
 			{
 				player.hp--;
-				player.InvincibilityTimer = 60;
+				player.InvincibilityTimer = INVINCIBLE_TIME;
 				if (player.hp <= 0)
 				{
 					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
@@ -444,7 +476,7 @@ void GameScene::Draw()
 {
 	// 背景画像描画(ループ)
 	DrawGraph(0, bgY, bgImage, TRUE);
-	DrawGraph(0, bgY - 600, bgImage, TRUE);
+	DrawGraph(0, bgY - BG_HEIGHT, bgImage, TRUE);
 
 	// プレイヤー画像
 	player.Draw(playerImage);
@@ -509,28 +541,28 @@ void GameScene::Draw()
 	}
 
 	// ボス出現までの時間を表示
-	int remain = 1800 - bossTimer;
+	int remain = BOSS_APPEAR_TIME - bossTimer;
 	if (remain > 0 && !isClear)
 	{
-		DrawFormatString(BOSS_TIME_X, BOSS_TIME_Y, GetColor(255, 0, 0), TEXT("ボス出現まで: %d"), remain / 60);
+		DrawFormatString(BOSS_TIME_X, BOSS_TIME_Y, COLOR_RED, TEXT("ボス出現まで: %d"), remain / FPS);
 	}
 	else if(remain<=0 && !isClear)
 	{
-		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス出現中！"), GetColor(255, 0, 0));
+		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス出現中！"), COLOR_RED);
 	}
 	else
 	{
-		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス撃破！"), GetColor(255, 0, 0));
+		DrawString(BOSS_TEXT_X, BOSS_TIME_Y, TEXT("ボス撃破！"), COLOR_RED);
 	}
 	
 
 	// 現在スコアを表示
-	DrawFormatString(SCORE_X, SCORE_Y, GetColor(0, 255, 0), TEXT("SCORE %d"), score);
+	DrawFormatString(SCORE_X, SCORE_Y, COLOR_GREEN, TEXT("SCORE %d"), score);
 
 	// プレイヤー体力表示
-	int x = 10; int y = 450; // 表示位置
+	int x = HP_BAR_X; int y = HP_BAR_Y; // 表示位置
 
-	DrawBox(x, y, x + maxHP * HP_BLOCK_WIDTH, y + HP_BLOCK_HEIGHT, GetColor(0,0,0), TRUE);
+	DrawBox(x, y, x + maxHP * HP_BLOCK_WIDTH, y + HP_BLOCK_HEIGHT, COLOR_BLACK, TRUE);
 	for (int i = 0; i < player.hp; i++)
 	{
 		int r = 255 * (maxHP - i) / maxHP; // RGB値を計算
@@ -540,9 +572,9 @@ void GameScene::Draw()
 	}
 
 	// ポーズを表示
-	SetFontSize(30);
+	SetFontSize(PAUSE_FONT_SIZE);
 	if (isPause)
 	{
-		DrawString(260, 100, TEXT("PAUSE"), GetColor(255, 0, 0));
+		DrawString(PAUSE_TEXT_X, PAUSE_TEXT_Y, TEXT("PAUSE"), COLOR_RED);
 	}
 }

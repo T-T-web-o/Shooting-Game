@@ -18,6 +18,7 @@ const int GUIDE_Y = 450;      // 操作案内のY座標
 // 文字の色(黒)
 const int COLOR_TEXT = GetColor(0, 0, 0);
 const int CLEAR_TEXT = GetColor(255, 255, 0);
+
 GameClearScene::GameClearScene()
 {
     // 画面サイズ取得
