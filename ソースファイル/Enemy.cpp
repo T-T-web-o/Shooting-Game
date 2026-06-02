@@ -6,7 +6,7 @@
 //============================================================
 // 定数
 //============================================================
-const int ENEMY_START_X_RANGE = 450; // 敵の出現X座標の範囲
+const int ENEMY_START_X = 450;       // 敵の出現X座標
 const int ENEMY_START_Y = -30;       // 敵の初期Y座標（画面外上）
 
 const int NORMAL_RATE = 60;          // NORMALの出現率
@@ -31,7 +31,7 @@ const int SCREEN_HEIGHT = 500;       // 画面の縦幅
 Enemy::Enemy()
 {
 	// 初期位置設定
-	x = ENEMY_START_X;
+	x =rand()% ENEMY_START_X;
 	y = ENEMY_START_Y;
 
 	// 生存状態
@@ -41,7 +41,7 @@ Enemy::Enemy()
 	baseX = x;
 
 	// 敵の出現率を設定
-	int r = SPAWN_RATE;
+	int r = rand() % 100;
 	
 	if (r < NORMAL_RATE)
 	{

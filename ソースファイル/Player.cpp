@@ -12,7 +12,7 @@ const int PLAYER_HP = 10;         // プレイヤーの初期体力
 const int PLAYER_SPEED = 5;       // プレイヤーの速度
 
 const int SCREEN_WIDTH = 640;     // 横画面サイズ
-const int SCREEN_HEIGHT = 480;    // 縦画面サイズ
+const int SCREEN_HEIGHT = 430;    // 縦画面サイズ
 
 //============================================================
 // コンストラクタ

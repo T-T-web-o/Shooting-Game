@@ -54,7 +54,7 @@ const TCHAR* guideText[] =
     TEXT("敵を倒してスコアを稼ごう"),
     TEXT("ボスを倒すとクリア"),
     TEXT("[ヒント]"),
-    TEXT("敵を避けながら戦おう"),
+    TEXT("腐った敵を倒すとスコアがマイナス"),
     TEXT("HPが0になるとゲームオーバー"),
 };
 
@@ -73,7 +73,7 @@ ExplanationScene::ExplanationScene()
     bgImage = LoadGraph(TEXT("Resource/Model/Explanation.png"));
     playerImage = LoadGraph(TEXT("Resource/Model/player.png"));
     enemyImage1 = LoadGraph(TEXT("Resource/Model/enemy1.png"));
-    enemyImage2 = LoadGraph(TEXT("Resource/Model/enemy2.png"));
+    enemyImage2 = LoadGraph(TEXT("Resource/Model/rotten2.png"));
 }
 
 //============================================================
