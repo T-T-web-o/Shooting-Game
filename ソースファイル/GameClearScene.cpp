@@ -65,5 +65,5 @@ void GameClearScene::Draw()
     
     // ëÄçÏàƒì‡
     SetFontSize(15);
-    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter to Title"), GetColor(255, 255, 255));
+    DrawString(GUIDE_X, GUIDE_Y, TEXT("Press Enter to ResultScene"), GetColor(255, 255, 255));
 }

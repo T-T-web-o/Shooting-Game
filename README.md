@@ -34,5 +34,5 @@
 https://drive.google.com/file/d/1dYoy7tGfkpze-8Rn0Z0iFC_V1FPqSFzW/view?usp=sharing
 
 ## Gameplay Video
-https://youtu.be/VLBq4qwnI34
+https://youtu.be/kp0Az5RV3S4
 
