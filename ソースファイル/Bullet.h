@@ -6,6 +6,9 @@ public:
 	// 現在位置
 	int x, y;
 
+	// 弾の速度
+	float vx, vy;
+
 	// 弾のダメージ
 	int damage;
 
@@ -13,7 +16,7 @@ public:
 	bool isDead;
 
 	// コンストラクタ
-	Bullet(int startX, int startY);
+	Bullet(int startX, int startY, float vx, float vy);
 
 	// 更新処理
 	void Update();

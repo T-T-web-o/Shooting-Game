@@ -73,6 +73,9 @@ GameScene::GameScene()
 
 	// íeâÊëú
 	bulletImage = LoadGraph(TEXT("Resource/Model/bullet.png"));
+	bossBulletImage1 = LoadGraph(TEXT("Resource/Model/bulletA.png"));
+	bossBulletImage2 = LoadGraph(TEXT("Resource/Model/bulletB.png"));
+	bossBulletImage3 = LoadGraph(TEXT("Resource/Model/bulletC.png"));
 
 	// ìGâÊëú
 	enemyImage1 = LoadGraph(TEXT("Resource/Model/enemy1.png"));
@@ -123,6 +126,9 @@ GameScene::GameScene()
 	// É^ÉCÉ}Å[
 	waitTimer = 0;
 	isClear = false;
+
+	// É{ÉXÇÃíeÇåÇÇ¬ä‘äu
+	shotspan = 0;
 }
 
 //============================================================
@@ -133,6 +139,9 @@ GameScene::~GameScene()
 	DeleteGraph(bgImage);
 	DeleteGraph(playerImage);
 	DeleteGraph(bulletImage);
+	DeleteGraph(bossBulletImage1);
+	DeleteGraph(bossBulletImage2);
+	DeleteGraph(bossBulletImage3);
 	DeleteGraph(enemyImage1);
 	DeleteGraph(enemyImage3);
 	DeleteGraph(enemyImage2);
@@ -201,10 +210,11 @@ void GameScene::Update()
 		// íeî≠ê∂éûÇ…å¯â âπçƒê∂
 		PlaySoundMem(SoundManager::shotSE, DX_PLAYTYPE_BACK);
 
-		bullets.push_back(std::make_unique<Bullet>(player.x, player.y));
+		bullets.push_back(std::make_unique<Bullet>(player.x, player.y, 0, -10));
 	}
 	prevSpace = nowSpace;
 
+	
 	// íeÇ∆ìGÇÃìñÇΩÇËîªíË
 	CollisionBulletEnemy();
 
@@ -218,6 +228,23 @@ void GameScene::Update()
 	{
 		isBoss = true;
 		boss = std::make_unique<Boss>();
+	}
+
+	// BosssèoåªíÜÇTïbÇ≤Ç∆Ç…íeî≠éÀ
+	if (boss)
+	{
+		shotspan++;
+		if (shotspan % 180 == 0)
+		{
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 10));
+		}
+
+		if (shotspan % 600 == 0)
+		{
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, -3, 5));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 5));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 3, 5));
+		}
 	}
 
 	// íeÇ∆É{ÉXÇÃìñÇΩÇËîªíË
@@ -249,10 +276,14 @@ void GameScene::Update()
 //============================================================
 void GameScene::UpdateBullet()
 {
-	
 	for (auto& b : bullets)
 	{
 		b->Update();
+	}
+
+	for (auto& bb : bossBullets)
+	{
+		bb->Update();
 	}
 }
 
@@ -293,6 +324,13 @@ void GameScene::RemoveDeadObjects()
 			return b->isDead;
 		}),
 		bullets.end());
+
+	bossBullets.erase(std::remove_if(bossBullets.begin(), bossBullets.end(),
+		[](const std::unique_ptr<Bullet>& bb)
+		{
+			return bb->isDead;
+		}),
+		bossBullets.end());
 
 	// ===== ìGÇçÌèú =====
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
@@ -486,6 +524,10 @@ void GameScene::Draw()
 	{
 		// ï`âÊÇ∑ÇÈâÊëúÇéwíË
 		b->Draw(bulletImage);
+	}
+	for (auto& bb : bossBullets)
+	{
+		bb->Draw(bossBulletImage1);
 	}
 
 	// ìGï`âÊ

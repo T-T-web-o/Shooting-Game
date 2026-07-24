@@ -4,11 +4,14 @@
 //============================================================
 // コンストラクタ（弾の初期化）
 //============================================================
-Bullet::Bullet(int startX, int startY)
+Bullet::Bullet(int startX, int startY, float vx, float vy)
 {
 	// 初期位置設定
 	x = startX;
 	y = startY;
+
+	this->vx = vx;
+	this->vy = vy;
 
 	// ダメ―ジを設定
 	damage = 100;
@@ -22,11 +25,12 @@ Bullet::Bullet(int startX, int startY)
 //============================================================
 void Bullet::Update()
 {
-	// 上に移動
-	y -= 10;
+
+	x += vx;
+	y += vy;
 
 	// 画面外に出たら削除
-	if (y < 0)
+	if (y < 0 || y > 1024 || x < 0 || x > 1536)
 	{
 		isDead = true;
 	}

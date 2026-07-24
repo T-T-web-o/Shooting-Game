@@ -16,6 +16,7 @@ private:
 
 	// ’eE“GEƒ{ƒX‚ÌŠÇ—
 	std::vector<std::unique_ptr<Bullet>>bullets;
+	std::vector<std::unique_ptr<Bullet>>bossBullets;
 	std::vector<std::unique_ptr<Enemy>>enemies;
 	std::unique_ptr<Boss>boss;
 	std::vector<std::unique_ptr<Effect>>effects;
@@ -44,6 +45,9 @@ private:
 	int bgY; // ”wŒi‚ÌƒXƒNƒ[ƒ‹ˆÊ’u
 	int bgImage;
 	int bulletImage;
+	int bossBulletImage1;
+	int bossBulletImage2;
+	int bossBulletImage3;
 	int playerImage;
 	int enemyImage1;
 	int enemyImage2;
@@ -87,6 +91,10 @@ private:
 	// BossŒ‚”j
 	int waitTimer;
 	bool isClear;
+
+	// Boss‚Ì‹…‚ğŒ‚‚ÂŠÔŠu
+	int shotspan;
+
 public:
 
 	~GameScene();
