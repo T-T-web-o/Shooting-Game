@@ -15,14 +15,17 @@ public:
 	// 削除フラグ
 	bool isDead;
 
+	// 画像
+	int image;
+
 	// コンストラクタ
-	Bullet(int startX, int startY, float vx, float vy);
+	Bullet(int startX, int startY, float vx, float vy,int image);
 
 	// 更新処理
 	void Update();
 
 	// 描画処理
-	void Draw(int Image);
+	void Draw();
 
 };
 

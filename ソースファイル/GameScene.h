@@ -38,8 +38,7 @@ private:
 	void CollisionPlayerEnemy();
 	void CollisionBulletBoss();
 	void CollisionPlayerBoss();
-
-
+	void CollisionBossBulletPlayer();
 
 	// 画像
 	int bgY; // 背景のスクロール位置
