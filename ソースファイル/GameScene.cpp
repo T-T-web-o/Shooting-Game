@@ -129,6 +129,9 @@ GameScene::GameScene()
 
 	// ボスの弾を撃つ間隔
 	shotspan = 0;
+
+	// ゲームオーバーフラグ
+	isGameOver = false;
 }
 
 //============================================================
@@ -255,6 +258,13 @@ void GameScene::Update()
 	
 	// プレイヤーとボスの当たり判定
 	CollisionPlayerBoss();
+
+	if (isGameOver)
+	{
+		// ゲームオーバーシーンへ移行
+		GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+		return;
+	}
 	
 	// ボス撃破
 	if (isClear)
@@ -447,7 +457,7 @@ void GameScene::CollisionPlayerEnemy()
 				player.InvincibilityTimer = INVINCIBLE_TIME;
 				if (player.hp <= 0)
 				{
-					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					isGameOver = true;
 					return;
 				}
 			}
@@ -502,13 +512,14 @@ void GameScene::CollisionPlayerBoss()
 				player.InvincibilityTimer = INVINCIBLE_TIME;
 				if (player.hp <= 0)
 				{
-					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					isGameOver = true;
 					return;
 				}
 			}
 		}
 	}
 }
+
 //============================================================
 // ボスの弾とプレイヤーの当たり判定
 //============================================================
@@ -534,9 +545,7 @@ void GameScene::CollisionBossBulletPlayer()
 				// HPが0になったらゲームオーバー
 				if (player.hp <= 0)
 				{
-					GameManager::GetInstance().ChangeScene(
-						std::make_unique<GameOverScene>()
-					);
+					isGameOver = true;
 					return;
 				}
 			}

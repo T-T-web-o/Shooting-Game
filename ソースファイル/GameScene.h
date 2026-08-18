@@ -94,6 +94,9 @@ private:
 	// Bossの球を撃つ間隔
 	int shotspan;
 
+	// ゲームオーバー
+	bool isGameOver;
+
 public:
 
 	~GameScene();
