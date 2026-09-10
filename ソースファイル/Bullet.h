@@ -16,13 +16,16 @@ public:
 	int damage;
 
 	// コンストラクタ
-	Bullet(int startX, int startY, float vx, float vy,int damage);
+	Bullet(int startX, int startY, float vx, float vy,int image,int damage);
+
+	// 画像
+	int image;
 
 	// 更新処理
 	void Update();
 
 	// 描画処理
-	void Draw(int Image);
+	void Draw();
 
 };
 

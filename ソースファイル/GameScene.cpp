@@ -129,6 +129,9 @@ GameScene::GameScene()
 
 	// ボスの弾を撃つ間隔
 	shotspan = 0;
+
+	// ゲームオーバーフラグ
+	isGameOver = false;
 }
 
 //============================================================
@@ -213,7 +216,7 @@ void GameScene::Update()
 		// 弾発生時に効果音再生
 		PlaySoundMem(SoundManager::shotSE, DX_PLAYTYPE_BACK);
 
-		bullets.push_back(std::make_unique<Bullet>(player.x, player.y, 0, -10,player.bulletDamage));
+		bullets.push_back(std::make_unique<Bullet>(player.x, player.y, 0, -10,bulletImage,player.bulletDamage));
 	}
 	prevSpace = nowSpace;
 
@@ -226,6 +229,9 @@ void GameScene::Update()
 	
 	// ボスの弾とプレイヤーの当たり判定
 	CollisionBulletPlayer();
+
+	// ボスの弾とプレイヤーの当たり判定
+	CollisionBossBulletPlayer();
 
 	// Boss出現
 	bossTimer++;
@@ -242,14 +248,14 @@ void GameScene::Update()
 		shotspan++;
 		if (shotspan % 180 == 0)
 		{
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 10,1));
+		    bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 10, bossBulletImage1,1));
 		}
 
 		if (shotspan % 600 == 0)
 		{
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, -3, 5,1));
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 5,1));
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 3, 5,1));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, -3, 5, bossBulletImage1, 1));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 5, bossBulletImage2, 1));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 3, 5, bossBulletImage3, 1));
 		}
 	}
 
@@ -258,6 +264,13 @@ void GameScene::Update()
 	
 	// プレイヤーとボスの当たり判定
 	CollisionPlayerBoss();
+
+	if (isGameOver)
+	{
+		// ゲームオーバーシーンへ移行
+		GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+		return;
+	}
 	
 	// ボス撃破
 	if (isClear)
@@ -485,7 +498,7 @@ void GameScene::CollisionPlayerEnemy()
 		        player.InvincibilityTimer = INVINCIBLE_TIME;
 				if (player.hp <= 0)
 				{
-					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					isGameOver = true;
 					return;
 				}
 			}
@@ -540,7 +553,7 @@ void GameScene::CollisionPlayerBoss()
 				player.InvincibilityTimer = INVINCIBLE_TIME;
 				if (player.hp <= 0)
 				{
-					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					isGameOver = true;
 					return;
 				}
 			}
@@ -577,6 +590,38 @@ void GameScene::CollisionBulletPlayer()
 }
 
 //============================================================
+// ボスの弾とプレイヤーの当たり判定
+//============================================================
+void GameScene::CollisionBossBulletPlayer()
+{
+	for (auto& bb : bossBullets)
+	{
+		if (abs(player.x - bb->x) < (playerW + bulletW) / 2 &&
+			abs(player.y - bb->y) < (playerH + bulletH) / 2)
+		{
+			// 無敵時間中は当たらない
+			if (player.InvincibilityTimer == 0)
+			{
+				// ボスの弾を削除
+				bb->isDead = true;
+
+				// プレイヤーにダメージ
+				player.hp--;
+
+				// 無敵時間を設定
+				player.InvincibilityTimer = INVINCIBLE_TIME;
+
+				// HPが0になったらゲームオーバー
+				if (player.hp <= 0)
+				{
+					isGameOver = true;
+					return;
+				}
+			}
+		}
+	}
+}
+//============================================================
 // ゲームの描画処理
 //============================================================
 void GameScene::Draw()
@@ -592,11 +637,11 @@ void GameScene::Draw()
 	for (auto& b : bullets)
 	{
 		// 描画する画像を指定
-		b->Draw(bulletImage);
+		b->Draw();
 	}
 	for (auto& bb : bossBullets)
 	{
-		bb->Draw(bossBulletImage1);
+		bb->Draw();
 	}
 
 	// 敵描画

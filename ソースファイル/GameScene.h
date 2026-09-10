@@ -42,7 +42,7 @@ private:
 	void CollisionBulletBoss();
 	void CollisionPlayerBoss();
 	void CollisionBulletPlayer();
-
+	void CollisionBossBulletPlayer();
 
 
 	// 画像
@@ -98,6 +98,9 @@ private:
 
 	// Bossの球を撃つ間隔
 	int shotspan;
+
+	// ゲームオーバー
+	bool isGameOver;
 
 public:
 

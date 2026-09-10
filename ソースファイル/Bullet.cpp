@@ -4,17 +4,18 @@
 //============================================================
 // コンストラクタ（弾の初期化）
 //============================================================
-Bullet::Bullet(int startX, int startY, float vx, float vy,int damage)
+Bullet::Bullet(int startX, int startY, float vx, float vy,int image, int damage)
 {
 	// 初期位置設定
 	x = startX;
 	y = startY;
 
+	// X方向・Y方向の移動速度を設定
 	this->vx = vx;
 	this->vy = vy;
 
+	this->image = image;
 	this->damage = damage;
-
 	// 生存状態
 	isDead = false;
 }
@@ -38,8 +39,8 @@ void Bullet::Update()
 //============================================================
 // 弾の描画処理
 //============================================================
-void Bullet::Draw(int Image)
+void Bullet::Draw()
 {
 	// 指定された画像を描画
-	DrawGraph(x, y, Image, TRUE);
+	DrawGraph(x, y, image, TRUE);
 }
