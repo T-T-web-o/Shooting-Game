@@ -4,7 +4,7 @@
 //============================================================
 // コンストラクタ（弾の初期化）
 //============================================================
-Bullet::Bullet(int startX, int startY, float vx, float vy)
+Bullet::Bullet(int startX, int startY, float vx, float vy,int damage)
 {
 	// 初期位置設定
 	x = startX;
@@ -13,8 +13,7 @@ Bullet::Bullet(int startX, int startY, float vx, float vy)
 	this->vx = vx;
 	this->vy = vy;
 
-	// ダメ―ジを設定
-	damage = 100;
+	this->damage = damage;
 
 	// 生存状態
 	isDead = false;

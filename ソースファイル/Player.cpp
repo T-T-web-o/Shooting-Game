@@ -14,6 +14,8 @@ const int PLAYER_SPEED = 5;       // プレイヤーの速度
 const int SCREEN_WIDTH = 640;     // 横画面サイズ
 const int SCREEN_HEIGHT = 430;    // 縦画面サイズ
 
+const int DAMAGE = 100;           // 弾のダメージ
+
 //============================================================
 // コンストラクタ
 //============================================================
@@ -28,6 +30,9 @@ Player::Player()
 
 	// 無敵時間
 	InvincibilityTimer = 0;
+
+	// 弾のダメージ
+	bulletDamage = DAMAGE;
 }
 
 

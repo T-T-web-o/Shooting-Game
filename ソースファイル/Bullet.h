@@ -9,14 +9,14 @@ public:
 	// 弾の速度
 	float vx, vy;
 
-	// 弾のダメージ
-	int damage;
-
 	// 削除フラグ
 	bool isDead;
 
+	// 弾のダメージ
+	int damage;
+
 	// コンストラクタ
-	Bullet(int startX, int startY, float vx, float vy);
+	Bullet(int startX, int startY, float vx, float vy,int damage);
 
 	// 更新処理
 	void Update();

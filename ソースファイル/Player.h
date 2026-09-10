@@ -11,6 +11,9 @@ public:
 	// 無敵時間
 	int InvincibilityTimer;
 
+	// 弾のダメージ
+	int bulletDamage;
+
 	// コンストラクタ
 	Player();
 

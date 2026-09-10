@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "Boss.h"
 #include "Effect.h"
+#include "Item.h"
 #include <vector>
 #include <memory>
 
@@ -20,6 +21,7 @@ private:
 	std::vector<std::unique_ptr<Enemy>>enemies;
 	std::unique_ptr<Boss>boss;
 	std::vector<std::unique_ptr<Effect>>effects;
+	std::vector<std::unique_ptr<Item>>items;
 
 	// ボス出現フラグ
 	bool isBoss;
@@ -29,6 +31,7 @@ private:
 	void UpdateEnemy();
 	void UpdateBoss();
 	void UpdateEffect();
+	void UpdateItem();
 
 	// 削除処理
 	void RemoveDeadObjects();
@@ -38,6 +41,7 @@ private:
 	void CollisionPlayerEnemy();
 	void CollisionBulletBoss();
 	void CollisionPlayerBoss();
+	void CollisionBulletPlayer();
 
 
 

@@ -194,6 +194,9 @@ void GameScene::Update()
 	// エフェクトの更新
 	UpdateEffect();
 
+	// アイテムの更新
+	UpdateItem();
+
 	// 敵を生成(ボス出現で削除)
     spawnTimer++;
 	if (!isBoss && spawnTimer > ENEMY_SPAWN_TIME)
@@ -210,7 +213,7 @@ void GameScene::Update()
 		// 弾発生時に効果音再生
 		PlaySoundMem(SoundManager::shotSE, DX_PLAYTYPE_BACK);
 
-		bullets.push_back(std::make_unique<Bullet>(player.x, player.y, 0, -10));
+		bullets.push_back(std::make_unique<Bullet>(player.x, player.y, 0, -10,player.bulletDamage));
 	}
 	prevSpace = nowSpace;
 
@@ -220,6 +223,9 @@ void GameScene::Update()
 
 	// プレイヤーと敵の当たり判定
 	CollisionPlayerEnemy();
+	
+	// ボスの弾とプレイヤーの当たり判定
+	CollisionBulletPlayer();
 
 	// Boss出現
 	bossTimer++;
@@ -236,14 +242,14 @@ void GameScene::Update()
 		shotspan++;
 		if (shotspan % 180 == 0)
 		{
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 10));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 10,1));
 		}
 
 		if (shotspan % 600 == 0)
 		{
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, -3, 5));
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 5));
-			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 3, 5));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, -3, 5,1));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 0, 5,1));
+			bossBullets.push_back(std::make_unique<Bullet>(boss->x, boss->y, 3, 5,1));
 		}
 	}
 
@@ -312,6 +318,14 @@ void GameScene::UpdateEffect()
 	}
 }
 
+void GameScene::UpdateItem()
+{
+	for (auto& i : items)
+	{
+		i->Update(player);
+	}
+}
+
 //============================================================
 // 不要オブジェクトの削除
 //============================================================
@@ -348,6 +362,14 @@ void GameScene::RemoveDeadObjects()
 			return ef->isDead;
 		}),
 		effects.end());
+
+	// ===== アイテムを削除 =====
+	items.erase(std::remove_if(items.begin(), items.end(),
+		[](const std::unique_ptr<Item>& i)
+		{
+			return i->isDead;
+		}),
+		items.end());
 }
 
 //============================================================
@@ -373,7 +395,7 @@ void GameScene::CollisionBulletEnemy()
 				// hpが0になったら削除
 				if (e->hp <= 0)
 				{
-					// 腐っていたらスコアマイナス
+				    // 腐っていたらスコアマイナス
 					if (e->isRotten)
 					{
 						switch (e->type)
@@ -406,6 +428,24 @@ void GameScene::CollisionBulletEnemy()
 						}
 					}
 					e->isDead = true;
+					
+					if(rand()%100<20)
+					{
+						ItemType itemType;
+
+						// 20%の確率でアイテムをドロップ
+						if (rand() % 2 == 0)
+						{
+							itemType = POWER;
+						}
+						else
+						{
+							itemType = HP;
+						}
+
+						// 敵を倒した場所にアイテムを生成
+						items.push_back(std::make_unique<Item>(e->x + enemyW / CENTER_DIV, e->y + enemyH / CENTER_DIV, itemType));
+					}
 
 					int efImage = effectImage1;
 
@@ -421,6 +461,7 @@ void GameScene::CollisionBulletEnemy()
 						efImage = effectImage3;
 						break;
 					}
+					// 敵を倒した場所にエフェクトを生成
 					effects.push_back(std::make_unique<Effect>(e->x + enemyW / CENTER_DIV, e->y + enemyH / CENTER_DIV, efImage));
 				}
 				break;
@@ -441,7 +482,7 @@ void GameScene::CollisionPlayerEnemy()
 			{
 				e->isDead = true;
 				player.hp--;
-				player.InvincibilityTimer = INVINCIBLE_TIME;
+		        player.InvincibilityTimer = INVINCIBLE_TIME;
 				if (player.hp <= 0)
 				{
 					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
@@ -497,6 +538,34 @@ void GameScene::CollisionPlayerBoss()
 			{
 				player.hp--;
 				player.InvincibilityTimer = INVINCIBLE_TIME;
+				if (player.hp <= 0)
+				{
+					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
+					return;
+				}
+			}
+		}
+	}
+}
+
+// ボスの弾とプレイヤーの当たり判定
+void GameScene::CollisionBulletPlayer()
+{
+	for (auto& bb : bossBullets)
+	{
+		if (abs(player.x - bb->x) < (playerW + bulletW) / 2 &&
+			abs(player.y - bb->y) < (playerH + bulletH) / 2)
+		{
+			// プレイヤーが無敵中でなければダメージ
+			if (player.InvincibilityTimer == 0)
+			{
+				player.hp--;
+				player.InvincibilityTimer = INVINCIBLE_TIME;
+
+				// ボスの弾を削除
+				bb->isDead = true;
+
+				// HPが0になったらゲームオーバー
 				if (player.hp <= 0)
 				{
 					GameManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());
@@ -582,6 +651,12 @@ void GameScene::Draw()
 		ef->Draw();
 	}
 
+	// アイテム描画
+	for (auto& i : items)
+	{
+		i->Draw();
+	}
+
 	// ボス出現までの時間を表示
 	int remain = BOSS_APPEAR_TIME - bossTimer;
 	if (remain > 0 && !isClear)
@@ -619,4 +694,5 @@ void GameScene::Draw()
 	{
 		DrawString(PAUSE_TEXT_X, PAUSE_TEXT_Y, TEXT("PAUSE"), COLOR_RED);
 	}
+	
 }
